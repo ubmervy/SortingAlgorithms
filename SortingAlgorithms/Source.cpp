@@ -1,8 +1,14 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <locale>
+#include <stdio.h>
+#include <ctype.h>
 #include <conio.h>
+#include <vector>
+
 using namespace std;
 
-template<class T>
 class SortStrategy
 {
 public:
@@ -13,110 +19,142 @@ public:
 	int cmp; // количество сравнений
 	int exch; // количество обменов
 
-	virtual void use(void) = 0;
+	virtual void SortSequence(vector<string> data) = 0;
 };
 
-template<class T>
-class SelectionSort : public SortStrategy<T>
+class SelectionSort : public SortStrategy
 {
 public:
 	SelectionSort(){}
 	~SelectionSort(){}
 
-	void use(void){ cout << "SelectionSort" << endl; };
+	void SortSequence(vector<string> data){ cout << "SelectionSort" << endl; };
 };
 
-template<class T>
-class InsertionSort : public SortStrategy<T>
+class InsertionSort : public SortStrategy
 {
 public:
 	InsertionSort(){}
 	~InsertionSort(){}
 
-	void use(void){ cout << "InsertionSort" << endl; };
+	void SortSequence(vector<string> data){ cout << "InsertionSort" << endl; };
 };
 
-template<class T>
-class QuickSort : public SortStrategy<T>
+class QuickSort : public SortStrategy
 {
 public:
 	QuickSort(){}
 	~QuickSort(){}
 
-	void use(void){ cout << "QuickSort" << endl; };
+	void SortSequence(vector<string> data){ cout << "QuickSort" << endl; };
 };
 
-template<class T>
-class MergeSort : public SortStrategy<T>
+class MergeSort : public SortStrategy
 {
 public:
 	MergeSort(){}
 	~MergeSort(){}
 
-	void use(void){ cout << "MergeSort" << endl; };
+	void SortSequence(vector<string> data){ cout << "MergeSort" << endl; };
 };
 
-template<class T>
-class ShellSort : public SortStrategy<T>
+class ShellSort : public SortStrategy
 {
 public:
 	ShellSort(){}
 	~ShellSort(){}
 
-	void use(void){ cout << "ShellSort" << endl; };
+	void SortSequence(vector<string> data)
+	{ 
+		vector<string>::iterator cur;
+		for (cur = data.begin(); cur < data.end(); ++cur)
+		{
+		cout << *cur << endl;  
+		}
+	};
 };
 
-template<class T>
 class Context
 {
 protected:
-	SortStrategy<T>* operation;
+	SortStrategy* sortStrategy;
 
 public:
 	Context(void){}
 	~Context(void){}
 
-	virtual void UseStrategy(void) = 0;
-	virtual void SetStrategy(SortStrategy<T>* v) = 0;
+	virtual void ApplySortStrategy(SortStrategy* v) = 0;
 };
 
-template<class T>
-class Client : public Context<T>
+class LoadFile
 {
 public:
-	Client(void){}
-	~Client(void){}
+	LoadFile(){};
 
-	void UseStrategy(void)
+	LoadFile(const string &file)
 	{
-		operation->use();
+		string line;
+		ifstream myfile(file);
+		if (myfile.is_open())
+		{
+			while (getline(myfile, line, ';'))
+			{
+				data.push_back(line);
+			}
+			myfile.close();
+		}
+
+	}
+	~LoadFile(void){}
+
+	vector<string> data;
+
+};
+
+class FileToSort : public Context, private LoadFile
+{
+public:
+
+	vector<string> filedata;
+
+	FileToSort(const string &file)
+	{
+		LoadFile fileObject(file);
+		filedata = fileObject.data;
 	}
 
-	void SetStrategy(SortStrategy<T>* sorttype)
+	~FileToSort(void){}
+
+	void SortFile(SortStrategy* sorttype)
 	{
-		operation = sorttype;
+		ApplySortStrategy(sorttype);
 	}
+
+private:
+
+
+	void ApplySortStrategy(SortStrategy* sorttype)
+	{
+		sorttype->SortSequence(filedata);
+	}
+
 };
 
 int main()
 {
-	Client<int> customClient;
-	QuickSort<int> str1;
-	MergeSort<int> str2;
-	ShellSort<int> str3;
-	InsertionSort<int> str4;
-	SelectionSort<int> str5;
+	FileToSort file("demo.txt");
 
-	customClient.SetStrategy(&str1);
-	customClient.UseStrategy();
-	customClient.SetStrategy(&str2);
-	customClient.UseStrategy();
-	customClient.SetStrategy(&str3);
-	customClient.UseStrategy();
-	customClient.SetStrategy(&str4);
-	customClient.UseStrategy();
-	customClient.SetStrategy(&str5);
-	customClient.UseStrategy();
+	QuickSort str1;
+	MergeSort str2;
+	ShellSort str3;
+	InsertionSort str4;
+	SelectionSort str5;
+
+	file.SortFile(&str1);
+	file.SortFile(&str2);
+	file.SortFile(&str3);
+	file.SortFile(&str4);
+	file.SortFile(&str5);
 
 	_getch();
 	return 0;
