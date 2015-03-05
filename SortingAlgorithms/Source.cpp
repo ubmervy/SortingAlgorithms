@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string>
+#include <string.h>
 #include <stdio.h>
 #include <conio.h>
 #include <vector>
@@ -11,6 +11,8 @@
 #include <memory>
 #include <stack>
 #include <chrono>
+#include <thread>
+#include <cstring>
 
 class Sequence
 {
@@ -644,6 +646,21 @@ public:
 		data.assign((std::istreambuf_iterator<char>(in.rdbuf())), std::istreambuf_iterator<char>());
 	}
 
+	//write sorted data to a file
+	void writeSortedData(const std::string& path, Sequence& sequence)
+	{
+		std::ofstream out(path);
+		if (out.is_open())
+		{
+			std::vector<std::string>::iterator it;
+			for (it = sequence.fd.begin(); it != sequence.fd.end(); ++it)
+			{
+				out << *it << std::endl;
+			}
+			out.close();
+		}
+	}
+
 };
 
 class FileSorter : public Context
@@ -776,12 +793,49 @@ private:
 		{
 			std::cout << *cur << std::endl;
 		}
+
 	}
 };
 
 int main(int argc, char* argv[])
 {
-	FileSorter file("D:/мои документы/visual studio 2013/Projects/SortingAlgorithms/demo.txt");
+	std::string myFile ("D:\\мои документы\\visual studio 2013\\Projects\\SortingAlgorithms\\");
+	std::string myOutPath;
+
+	if (argc < 5) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
+		std::cout << "Usage is -in <input file path> -o <output file name>\n"; // Inform the user of how to use the program
+		std::cin.get();
+		exit(0);
+	}
+	else
+	{ // if we got enough parameters...
+		
+
+		for (int i = 1; i < argc; i+=2)
+		{
+			if (i + 1 != argc)
+			{
+				std::string arg(argv[i]);
+				if (arg == "-in")
+				{
+					myFile = myFile + std::string(argv[i + 1]);
+				}
+				else if (arg == "-o")
+				{
+					myOutPath = argv[i + 1];
+				}
+				else {
+					std::cout << "Not enough or invalid arguments, please try again.\n";
+					std::this_thread::sleep_for(std::chrono::seconds(10));
+					exit(0);
+				}
+				std::cout << argv[0] << " ";
+			}
+		}
+	}	
+	
+	FileSorter file(myFile);
+
 	_getch();
 	return 0;
 };
