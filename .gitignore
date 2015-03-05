@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.sln.docstates
+SortingAlgorithms.opensdf
 
 # Build results
 
@@ -53,6 +54,7 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+SortingAlgorithms.opensdf
 
 # Visual Studio profiler
 *.psess
