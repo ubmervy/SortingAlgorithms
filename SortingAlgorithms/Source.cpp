@@ -629,27 +629,23 @@ class FileLoader
 public:
 
 	FileLoader(){};
-
-	FileLoader(const std::string& path)
-	{
-		getFileData(path);
-	};
+	FileLoader(FileLoader& other){};
 
 	~FileLoader(){};
 
-	std::string data;
-
-	//get string data
-	void getFileData(const std::string& path)
+	//get string string from file data
+	std::string GetFileData(std::string& srcpath)
 	{
-		std::ifstream in(path);
+		std::string data;
+		std::ifstream in(srcpath, std::ios::in);
 		data.assign((std::istreambuf_iterator<char>(in.rdbuf())), std::istreambuf_iterator<char>());
+		return data;
 	}
 
 	//write sorted data to a file
-	void writeSortedData(const std::string& path, Sequence& sequence)
+	void WriteToFile(const std::string& dstpath, Sequence& sequence)
 	{
-		std::ofstream out(path);
+		std::ofstream out(dstpath);
 		if (out.is_open())
 		{
 			std::vector<std::string>::iterator it;
@@ -661,6 +657,27 @@ public:
 		}
 	}
 
+	/*CopyFromTo(std::string& srcpath, std::string& dstpath)
+		{
+			std::ifstream source(srcpath, std::ios::binary);
+			std::ofstream dest(dstpath, std::ios::binary);
+
+			// file size
+			source.seekg(0, std::ios::end);
+			std::ifstream::pos_type size = source.tellg();
+			source.seekg(0);
+			// allocate memory for buffer
+			char* buffer = new char[size];
+
+			// copy file    
+			source.read(buffer, size);
+			dest.write(buffer, size);
+
+			// clean up
+			delete[] buffer;
+			source.close();
+			dest.close();
+		}*/
 };
 
 class FileSorter : public Context
@@ -668,64 +685,69 @@ class FileSorter : public Context
 public:
 
 	FileSorter(){};
-	FileSorter(const std::string filepath, bool stable = 1, bool memory = 1, char datatype = 's') :
-		filepath(filepath),
-		stable(stable),
-		memory(memory),
-		datatype(datatype),
-		sortresults({})
+
+	FileSorter(std::string& srcpath, std::string& dstpath, bool stable = 1, char datatype = 's') :
+		_sortresults{},
+		_strategies{},
+		_srcpath(srcpath),
+		_dstpath(dstpath),
+		_stable(stable),
+		_memory(1),
+		_datatype(datatype),
+		_fileObject()
 	{
-		FileLoader fileObject(filepath);
-		Sequence sequence{ fileObject.data, stable, memory, datatype };
-		SortFile(sequence, stable, memory, 0);
+		Sequence sequence{ _fileObject.GetFileData(_srcpath), _stable, _memory, _datatype };
+		SortFile(sequence, _stable, _memory, 0);
+		_fileObject.WriteToFile(_dstpath, sequence);
 	}
 
-	~FileSorter(){};
+	~FileSorter()
+	{};
 
-	std::map<std::string, SortStrategy*> strategies;
-
-	std::vector<SortResult> sortresults;
+	std::map<std::string, SortStrategy*> _strategies;
+	std::vector<SortResult> _sortresults;
 
 	void SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool recommend = 1)
 	{
-		strategies.insert(std::pair<std::string, SortStrategy*>("ins", new InsertionSort));
-		strategies["ins"] = new InsertionSort;
-		strategies["qs"] = new QuickSort;
-		strategies["shs"] = new ShellSort;
-		strategies["hs"] = new HeapSort;
-		strategies["ms"] = new MergeSort;
-		strategies["sls"] = new SelectionSort;
+		_strategies.insert(std::pair<std::string, SortStrategy*>("ins", new InsertionSort));
+		_strategies["ins"] = new InsertionSort;
+		_strategies["qs"] = new QuickSort;
+		_strategies["shs"] = new ShellSort;
+		_strategies["hs"] = new HeapSort;
+		_strategies["ms"] = new MergeSort;
+		_strategies["sls"] = new SelectionSort;
 		std::string recommended;
 
 		if (recommend)
 		{
 			recommended = RecommendStrategy(sequence, stable, memory);
-			sortresults.push_back(ApplySortStrategy(sequence, strategies[recommended]));
+			_sortresults.push_back(ApplySortStrategy(sequence, _strategies[recommended]));
 		}
 		else
 		{
 			std::map<std::string, SortStrategy*>::iterator it;
-			for (it = strategies.begin(); it != strategies.end(); ++it)
+			for (it = _strategies.begin(); it != _strategies.end(); ++it)
 			{
-				sortresults.push_back(ApplySortStrategy(sequence, (*it).second));
+				_sortresults.push_back(ApplySortStrategy(sequence, (*it).second));
 			}
 		}
 
-		WriteResult(sortresults, sequence);
+		WriteResult(_sortresults, sequence);
 	};
 
 private:
-
-	const std::string filepath;
-	bool stable;
-	bool memory;
-	char datatype;
+	std::string _srcpath;
+	std::string _dstpath;
+	bool _stable;
+	bool _memory;
+	char _datatype;
+	FileLoader _fileObject;
 
 	SortResult ApplySortStrategy(Sequence &sequence, SortStrategy *sorttype) override
 	{
 		SortResult sr;
 
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> >;
 		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
 
 		sr = sorttype->SortSequence(sequence);
@@ -793,48 +815,52 @@ private:
 		{
 			std::cout << *cur << std::endl;
 		}
-
+		_fileObject.WriteToFile(_dstpath, sequence);
 	}
 };
 
 int main(int argc, char* argv[])
 {
-	std::string myFile ("D:\\мои документы\\visual studio 2013\\Projects\\SortingAlgorithms\\");
-	std::string myOutPath;
+	std::string inFilePath;
+	std::string outFilePath = "sorted";
 
-	if (argc < 5) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
-		std::cout << "Usage is -in <input file path> -o <output file name>\n"; // Inform the user of how to use the program
+	if (argc < 3) { // Check the value of argc. If not enough parameters have been passed, inform user and exit.
+		std::cout << "Usage is\n -in <input file path> \n -o <output file name> (or it will be saved in sorted.txt)\n -s <stable sorting is required> "; // Inform the user of how to use the program
 		std::cin.get();
 		exit(0);
 	}
 	else
-	{ // if we got enough parameters...
-		
-
-		for (int i = 1; i < argc; i+=2)
+	{ // if we've got enough parameters
+		for (int i = 1; i < argc; ++i)
 		{
-			if (i + 1 != argc)
+			if (std::string(argv[i]) == "-in")
 			{
-				std::string arg(argv[i]);
-				if (arg == "-in")
-				{
-					myFile = myFile + std::string(argv[i + 1]);
-				}
-				else if (arg == "-o")
-				{
-					myOutPath = argv[i + 1];
-				}
-				else {
-					std::cout << "Not enough or invalid arguments, please try again.\n";
-					std::this_thread::sleep_for(std::chrono::seconds(10));
-					exit(0);
-				}
-				std::cout << argv[0] << " ";
+				inFilePath = std::string(argv[i + 1]);
+				++i;
+			}
+			else if (std::string(argv[i]) == "-o")
+			{
+				outFilePath = std::string(argv[i + 1]);
+				++i;
+			}
+			else {
+				std::cout << "Not enough or invalid arguments, please try again.\n";
+				std::this_thread::sleep_for(std::chrono::seconds(10));
+				exit(0);
 			}
 		}
-	}	
-	
-	FileSorter file(myFile);
+	}
+
+	if (inFilePath == "" | outFilePath == "")
+	{ // Check the value of argc. If not enough parameters have been passed, inform user and exit.
+		std::cout << "Please, enter path to input file with -in option. \n"; // Inform the user of how to use the program
+		std::cin.get();
+		exit(0);
+	}
+	else
+	{
+		FileSorter file(inFilePath, outFilePath, 0, 's');
+	}
 
 	_getch();
 	return 0;
