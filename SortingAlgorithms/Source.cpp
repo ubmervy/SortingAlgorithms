@@ -17,19 +17,17 @@
 class Sequence
 {
 public:
-	Sequence(std::string &data, bool stable, bool memory, char datatype = 's') :
+	Sequence(std::string &data, bool stable, bool memory) :
 		_data(data),
-		_datatype(datatype),
 		_stable_sign(stable),
 		_memory_sign(memory)
 	{
-		CreateSequence(_data, _datatype);
+		CreateSequence(_data);
 	};
 
 	//copy constructor of Sequence
 	Sequence(const Sequence& other_sequence) :
 		_data(other_sequence._data),
-		_datatype(other_sequence._datatype),
 		_stable_sign(other_sequence._stable_sign),
 		_memory_sign(other_sequence._memory_sign)
 	{
@@ -42,7 +40,6 @@ public:
 	// move constructor of Sequence
 	Sequence(Sequence&& other_sequence) :
 		_data(""),
-		_datatype('\0'),
 		_stable_sign('\0'),
 		_memory_sign('\0')
 	{
@@ -53,7 +50,6 @@ public:
 	void swap(Sequence &other_sequence) throw ()
 	{
 		std::swap(this->_data, other_sequence._data);
-		std::swap(this->_datatype, other_sequence._datatype);
 		std::swap(this->_stable_sign, other_sequence._stable_sign);
 		std::swap(this->_memory_sign, other_sequence._memory_sign);
 
@@ -66,7 +62,6 @@ public:
 	void release(Sequence &other_sequence)
 	{
 		other_sequence._data = "";
-		other_sequence._datatype = '\0';
 		other_sequence._stable_sign = '\0';
 		other_sequence._memory_sign = '\0';
 
@@ -76,6 +71,7 @@ public:
 		other_sequence.string_filedata.shrink_to_fit();
 		other_sequence.double_filedata.clear();
 		other_sequence.double_filedata.shrink_to_fit();*/
+
 		other_sequence.fd.clear();
 		other_sequence.fd.shrink_to_fit();
 	}
@@ -96,7 +92,6 @@ public:
 	~Sequence(){};
 
 	std::string _data;
-	char _datatype;
 
 	/*std::vector<int> int_filedata;
 	std::vector<std::string> string_filedata;
@@ -108,7 +103,7 @@ public:
 	bool _stable_sign; // stability result is required;
 	bool _memory_sign; // additional memory for sorting is available;
 
-	void CreateSequence(std::string data, char datatype)
+	void CreateSequence(std::string data)
 	{
 		//convert text to lower case
 		std::transform(data.begin(), data.end(), data.begin(), ::tolower);
@@ -261,6 +256,21 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		SelectionSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+	void SelectionSortSequence(Sequence &sequence)
+	{
 		int left = 0;
 		int right = sequence.fd.size() - 1;
 		for (int i = left; i <= right; i++)
@@ -279,7 +289,6 @@ public:
 			sr.moves++;
 		}
 		sr.cmp += 2;
-		return sr;
 	}
 };
 
@@ -294,6 +303,22 @@ public:
 	SortResult sr{ alg_name };
 
 	SortResult SortSequence(Sequence &sequence) override
+	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		InsertionSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		(*this).sr.duration = duration;
+		//std::cout << (*this).sr.duration;
+		return sr;
+	}
+
+private:
+	void InsertionSortSequence(Sequence &sequence)
 	{
 		int left = 0;
 		int right = sequence.fd.size() - 1;
@@ -312,7 +337,6 @@ public:
 			sr.moves++;
 			sequence.fd[j] = v;
 		}
-		return sr;
 	}
 };
 
@@ -327,7 +351,21 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
 
+		QuickSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+	void QuickSortSequence(Sequence &sequence)
+	{
 		int left = 0;
 		int right = sequence.fd.size() - 1;
 		std::stack <int> st;
@@ -370,7 +408,6 @@ public:
 				maxStack = st.size() / 2;
 				sr.cmp++;
 			}
-			return sr;
 		}
 	}
 
@@ -428,11 +465,26 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		MergeSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+
+	void MergeSortSequence(Sequence &sequence)
+	{
 		int left = 0;
 		int right = sequence.fd.size() - 1;
 		MergeSequence(sequence, left, right);
-		return sr;
-	};
+	}
 
 	void MergeSequence(Sequence &sequence, int left, int right)
 	{
@@ -488,7 +540,21 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
 
+		HeapSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+	void HeapSortSequence(Sequence &sequence)
+	{
 		int k, N = sequence.fd.size() - 1;
 		int left = 0;
 		int right = sequence.fd.size() - 1;
@@ -506,7 +572,6 @@ public:
 			sr.moves++;
 			fixDown(sequence, 1, --N);
 		}
-		return sr;
 	}
 
 	void fixDown(Sequence &sequence, int k, int N)
@@ -542,6 +607,22 @@ public:
 	SortResult sr{ alg_name };
 
 	SortResult SortSequence(Sequence &sequence) override
+	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		ShellSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+
+	void ShellSortSequence(Sequence &sequence)
 	{
 		int cm[] = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // Ì.Ciura’s sequence for Shell sort
 		int left = 0;
@@ -588,13 +669,9 @@ public:
 			}
 			gaps.pop_back();
 		}
-
-		return sr;
 	}
 
-private:
-
-	//determine gaps for h-sorting if 3*N > max of Ì.Ciura’s A102549 sequence
+	//calculate gaps for h-sorting if 3*N > max of A102549 sequence
 	int defineMoreGaps(int n, int i) const
 	{
 		int d = 0;
@@ -614,13 +691,14 @@ private:
 class Context
 {
 protected:
-	SortStrategy* sortStrategy;
+	std::unique_ptr<SortStrategy> sortStrategy;
 
 public:
 	Context(){}
 	~Context(){}
 
-	virtual SortResult ApplySortStrategy(Sequence &sequence, SortStrategy *sorttype) = 0;
+	virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
+	virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
 };
 
 //load text data from file, delete punctuation and create vector of words
@@ -659,24 +737,24 @@ public:
 
 	/*CopyFromTo(std::string& srcpath, std::string& dstpath)
 		{
-			std::ifstream source(srcpath, std::ios::binary);
-			std::ofstream dest(dstpath, std::ios::binary);
+		std::ifstream source(srcpath, std::ios::binary);
+		std::ofstream dest(dstpath, std::ios::binary);
 
-			// file size
-			source.seekg(0, std::ios::end);
-			std::ifstream::pos_type size = source.tellg();
-			source.seekg(0);
-			// allocate memory for buffer
-			char* buffer = new char[size];
+		// file size
+		source.seekg(0, std::ios::end);
+		std::ifstream::pos_type size = source.tellg();
+		source.seekg(0);
+		// allocate memory for buffer
+		char* buffer = new char[size];
 
-			// copy file    
-			source.read(buffer, size);
-			dest.write(buffer, size);
+		// copy file
+		source.read(buffer, size);
+		dest.write(buffer, size);
 
-			// clean up
-			delete[] buffer;
-			source.close();
-			dest.close();
+		// clean up
+		delete[] buffer;
+		source.close();
+		dest.close();
 		}*/
 };
 
@@ -684,55 +762,53 @@ class FileSorter : public Context
 {
 public:
 
-	FileSorter(){};
+	FileSorter() {}
 
-	FileSorter(std::string& srcpath, std::string& dstpath, bool stable = 1, char datatype = 's') :
+	FileSorter(std::string& srcpath, std::string& dstpath, bool stable = 1) :
 		_sortresults{},
 		_strategies{},
 		_srcpath(srcpath),
 		_dstpath(dstpath),
 		_stable(stable),
 		_memory(1),
-		_datatype(datatype),
 		_fileObject()
 	{
-		Sequence sequence{ _fileObject.GetFileData(_srcpath), _stable, _memory, _datatype };
+		Sequence sequence{ _fileObject.GetFileData(_srcpath), _stable, _memory};
 		SortFile(sequence, _stable, _memory, 0);
-		_fileObject.WriteToFile(_dstpath, sequence);
+		WriteResult(sequence);
 	}
 
-	~FileSorter()
-	{};
+	~FileSorter() {}
 
-	std::map<std::string, SortStrategy*> _strategies;
+	std::map<std::string, std::unique_ptr<SortStrategy>> _strategies;
 	std::vector<SortResult> _sortresults;
 
-	void SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool recommend = 1)
+	void SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool test = 1)
 	{
-		_strategies.insert(std::pair<std::string, SortStrategy*>("ins", new InsertionSort));
-		_strategies["ins"] = new InsertionSort;
-		_strategies["qs"] = new QuickSort;
-		_strategies["shs"] = new ShellSort;
-		_strategies["hs"] = new HeapSort;
-		_strategies["ms"] = new MergeSort;
-		_strategies["sls"] = new SelectionSort;
-		std::string recommended;
+		_strategies["hs"] = std::unique_ptr<SortStrategy>(new HeapSort);
+		_strategies["ins"] = std::unique_ptr<SortStrategy> (new InsertionSort);
+		_strategies["ms"] = std::unique_ptr<SortStrategy>(new MergeSort);
+		_strategies["qs"] = std::unique_ptr<SortStrategy>(new QuickSort);
+		_strategies["shs"] = std::unique_ptr<SortStrategy>(new ShellSort);
+		_strategies["sls"] = std::unique_ptr<SortStrategy>(new SelectionSort);
 
-		if (recommend)
+		if (test)
 		{
-			recommended = RecommendStrategy(sequence, stable, memory);
-			_sortresults.push_back(ApplySortStrategy(sequence, _strategies[recommended]));
+			std::unique_ptr<SortStrategy> recommendedStrategy = std::move(_strategies[RecommendStrategy(sequence)]);
+			SetSortStrategy(recommendedStrategy);
+			_sortresults.push_back(ApplySortStrategy(sequence));
 		}
 		else
 		{
-			std::map<std::string, SortStrategy*>::iterator it;
+
+			std::map<std::string, std::unique_ptr<SortStrategy>>::iterator it;
 			for (it = _strategies.begin(); it != _strategies.end(); ++it)
 			{
-				_sortresults.push_back(ApplySortStrategy(sequence, (*it).second));
+				std::unique_ptr<SortStrategy> currentStrategy = std::move((*it).second);;
+				SetSortStrategy(currentStrategy);
+				_sortresults.push_back(ApplySortStrategy(sequence));
 			}
 		}
-
-		WriteResult(_sortresults, sequence);
 	};
 
 private:
@@ -740,27 +816,20 @@ private:
 	std::string _dstpath;
 	bool _stable;
 	bool _memory;
-	char _datatype;
 	FileLoader _fileObject;
 
-	SortResult ApplySortStrategy(Sequence &sequence, SortStrategy *sorttype) override
+	void SetSortStrategy(std::unique_ptr<SortStrategy> &strategy) override
 	{
-		SortResult sr;
-
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> >;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
-
-		sr = sorttype->SortSequence(sequence);
-
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
-
-		sr.duration = duration;
-
-		return sr;
+		sortStrategy.reset(nullptr);
+		sortStrategy = std::move(strategy);
 	}
 
-	std::string RecommendStrategy(Sequence &sequence, bool stable, bool memory)
+	SortResult ApplySortStrategy(Sequence &sequence) override
+	{
+		return sortStrategy->SortSequence(sequence);
+	}
+
+	std::string RecommendStrategy(Sequence &sequence)
 	{
 		if (sequence.fd.size() < 100)
 		{
@@ -768,7 +837,7 @@ private:
 		}
 		else if (sequence.fd.size() > 100 && sequence.fd.size() < 1000)
 		{
-			if (stable)
+			if (_stable)
 			{
 				return "qs";
 			}
@@ -779,9 +848,9 @@ private:
 		}
 		else if (sequence.fd.size() > 1000)
 		{
-			if (!memory)
+			if (!_memory)
 			{
-				if (stable)
+				if (_stable)
 				{
 					return "qs";
 				}
@@ -797,25 +866,25 @@ private:
 		}
 	}
 
-	//void WriteResult(Sequence &sequence)
-	void WriteResult(std::vector<SortResult> sortresults, Sequence &sequence)
+	void WriteResult(Sequence &sequence)
 	{
-		for (int i = 0; i < sortresults.size(); ++i)
+		_fileObject.WriteToFile(_dstpath, sequence);
+		for (int i = 0; i < _sortresults.size(); ++i)
 		{
-			std::cout << "sorttype: " << sortresults.at(i).sorttype << std::endl;
-			std::cout << "exch number: " << sortresults.at(i).moves << std::endl;
-			std::cout << "compare number: " << sortresults.at(i).cmp << std::endl;
-			std::cout << "sorttime: " << sortresults.at(i).duration << std::endl << std::endl;
+			std::cout << "sorttype: " << _sortresults.at(i).sorttype << std::endl;
+			std::cout << "exch number: " << _sortresults.at(i).moves << std::endl;
+			std::cout << "compare number: " << _sortresults.at(i).cmp << std::endl;
+			std::cout << "sorttime: " << _sortresults.at(i).duration << std::endl << std::endl;
 			std::cout << std::endl;
 		}
 
-		std::vector<std::string>::iterator cur;
+	/*	std::vector<std::string>::iterator cur;
 		//std::vector<std::shared_ptr<void>>::iterator cur;
 		for (cur = sequence.fd.begin(); cur < sequence.fd.end(); ++cur)
 		{
 			std::cout << *cur << std::endl;
-		}
-		_fileObject.WriteToFile(_dstpath, sequence);
+		}*/
+		
 	}
 };
 
@@ -859,7 +928,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		FileSorter file(inFilePath, outFilePath, 0, 's');
+		FileSorter file(inFilePath, outFilePath, 0);
 	}
 
 	_getch();

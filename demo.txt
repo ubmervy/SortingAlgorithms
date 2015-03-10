@@ -1,1 +1,218 @@
-15; 121; 10; 101; 2;
+35; 121; 10; 101; 2; 34; 57; ddf; 35; erg; zsd; sefg; 		int left = 0;
+		int right = sequence.fd.size() - 1;
+		for (int i = left + 1; i <= right; i++)
+		{
+			int j = i;
+			auto v = sequence.fd.at(j);
+			while (j > left && v < sequence.fd.at(j - 1))
+			{
+				sequence.fd[j] = sequence.fd[j - 1];
+				{
+				sequence.fd[j] = sequence.fd[j - 1];
+				j--;
+				sr.cmp += 2;
+				sr.moves++;
+			}
+			sr.cmp += 2;
+			sr.moves++;
+			sequence.fd[j] = v;
+		}
+	}
+};
+
+class QuickSort : public SortStrategy
+{
+public:
+	QuickSort(){}
+	~QuickSort(){}
+
+	const std::string alg_name = "QuickSort";
+	SortResult sr{ alg_name };
+
+	SortResult SortSequence(Sequence &sequence) override
+	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		QuickSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+	void QuickSortSequence(Sequence &sequence)
+	{
+		int left = 0;
+		int right = sequence.fd.size() - 1;
+		std::stack <int> st;
+		st.push(right);
+		st.push(left);
+		int maxStack = st.size() / 2;
+
+		while (!st.empty())
+		{
+			left = st.top();
+			st.pop();
+			right = st.top();
+			st.pop();
+			if (right <= left)
+			{
+				//cmp++;
+				continue;
+			}
+			int i = MakePartition(sequence, left, right);
+
+			//push2(s, l, i - 1);
+			//push2(s, i + 1, r);
+
+			//push2(s, i + 1, r);
+			//push2(s, l, i - 1);
+
+			if (i - left > right - i)
+			{
+				sr.cmp++;
+				PushToStack(st, left, --i);
+				PushToStack(st, ++i, right);
+			}
+			else
+			{
+				PushToStack(st, ++i, right);
+				PushToStack(st, left, --i);
+			}
+			if (st.size() / 2 > (unsigned)maxStack)
+			{
+				maxStack = st.size() / 2;
+				sr.cmp++;
+			}
+		}
+	}
+
+	int MakePartition(Sequence &sequence, int left, int right)
+	{
+		int i = left - 1, j = right;
+		std::string v = sequence.fd[right];
+		//std::shared_ptr<void> v = sequence.fd.at(right);
+		for (;;)
+		{
+			while (sequence.fd[++i] < v)
+			{
+				sr.cmp++;
+			};
+			sr.cmp++;
+			while (v < sequence.fd.at(--j))
+			{
+				sr.cmp++;
+				if (j == left)
+				{
+					break;
+				}
+			}
+			sr.cmp++;
+			if (i >= j)
+			{
+				sr.cmp++;
+				break;
+			}
+			sr.cmp++;
+
+			std::swap(sequence.fd[i], sequence.fd[j]);
+			sr.moves++;
+		}
+		std::swap(sequence.fd[i], sequence.fd[right]);
+		sr.moves++;
+		return i;
+	}
+
+	void PushToStack(std::stack<int> &s, int &A, int &B) const
+	{
+		s.push(B);
+		s.push(A);
+	}
+};
+
+class MergeSort : public SortStrategy
+{
+public:
+	MergeSort(){}
+	~MergeSort(){}
+
+	const std::string alg_name = "MergeSort";
+	SortResult sr{ alg_name };
+
+	SortResult SortSequence(Sequence &sequence) override
+	{
+		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
+		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+
+		MergeSortSequence(sequence);
+
+		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+
+		sr.duration = duration;
+		return sr;
+	}
+
+private:
+
+	void MergeSortSequence(Sequence &sequence)
+	{
+		int left = 0;
+		int right = sequence.fd.size() - 1;
+		MergeSequence(sequence, left, right);
+	}
+
+	void MergeSequence(Sequence &sequence, int left, int right)
+	{
+		if (right <= left) return;
+		int m = (right + left) / 2;
+		int new_left = m + 1;
+		MergeSequence(sequence, left, m);
+		MergeSequence(sequence, new_left, right);
+		merge(sequence, left, m, right);
+	};
+
+	void merge(Sequence &sequence, int l, int m, int r)
+	{
+		int i, j;
+		std::vector<std::string> aux(sequence.fd.size());
+		//	static std::vector<std::shared_ptr<void*>> aux(sequence.fd.size());
+		for (i = m + 1; i > l; --i)
+		{
+			aux[i - 1] = sequence.fd[i - 1];
+			sr.moves++;
+		}
+		for (j = m; j < r; ++j)
+		{
+			aux[r + m - j] = sequence.fd[j + 1];
+			sr.moves++;
+		}
+		for (int k = l; k <= r; ++k)
+		{
+			if (aux.at(j) < aux.at(i))
+			{
+				sequence.fd[k] = aux[j--];
+				sr.cmp++;
+				sr.moves++;
+			}
+			else
+			{
+				sequence.fd[k] = aux[i++];
+				sr.moves++;
+			}
+			sr.cmp++;
+		}
+	}
+};
+
+class HeapSort : public SortStrategy
+{
+public:
+	HeapSort(){}
+	~HeapSort(){}
+
+	const std::string alg_name = "HeapSort";
