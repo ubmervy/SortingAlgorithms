@@ -18,6 +18,9 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\demo.txt">
@@ -28,5 +31,10 @@
     <None Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\s.docx">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

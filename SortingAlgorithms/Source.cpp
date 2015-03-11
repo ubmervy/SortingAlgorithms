@@ -13,188 +13,7 @@
 #include <chrono>
 #include <thread>
 #include <cstring>
-
-class Sequence
-{
-public:
-	Sequence(std::string &data, bool stable, bool memory) :
-		_data(data),
-		_stable_sign(stable),
-		_memory_sign(memory)
-	{
-		CreateSequence(_data);
-	};
-
-	//copy constructor of Sequence
-	Sequence(const Sequence& other_sequence) :
-		_data(other_sequence._data),
-		_stable_sign(other_sequence._stable_sign),
-		_memory_sign(other_sequence._memory_sign)
-	{
-		/*		int_filedata = other_sequence.int_filedata;
-				string_filedata = other_sequence.string_filedata;
-				double_filedata = other_sequence.double_filedata;*/
-		fd = other_sequence.fd;
-	}
-
-	// move constructor of Sequence
-	Sequence(Sequence&& other_sequence) :
-		_data(""),
-		_stable_sign('\0'),
-		_memory_sign('\0')
-	{
-		swap(other_sequence);
-		release(other_sequence);
-	}
-
-	void swap(Sequence &other_sequence) throw ()
-	{
-		std::swap(this->_data, other_sequence._data);
-		std::swap(this->_stable_sign, other_sequence._stable_sign);
-		std::swap(this->_memory_sign, other_sequence._memory_sign);
-
-		/*		std::swap(this->int_filedata, other_sequence.int_filedata);
-				std::swap(this->string_filedata, other_sequence.string_filedata);
-				std::swap(this->double_filedata, other_sequence.double_filedata);*/
-		std::swap(this->fd, other_sequence.fd);
-	}
-
-	void release(Sequence &other_sequence)
-	{
-		other_sequence._data = "";
-		other_sequence._stable_sign = '\0';
-		other_sequence._memory_sign = '\0';
-
-		/*other_sequence.int_filedata.clear();
-		other_sequence.int_filedata.shrink_to_fit();
-		other_sequence.string_filedata.clear();
-		other_sequence.string_filedata.shrink_to_fit();
-		other_sequence.double_filedata.clear();
-		other_sequence.double_filedata.shrink_to_fit();*/
-
-		other_sequence.fd.clear();
-		other_sequence.fd.shrink_to_fit();
-	}
-
-
-	Sequence operator=(Sequence&& other_sequence)
-	{
-		if (this != &other_sequence)
-		{
-			release(*this);
-			swap(other_sequence);
-			release(other_sequence);
-		}
-
-		return *this;
-	}
-
-	~Sequence(){};
-
-	std::string _data;
-
-	/*std::vector<int> int_filedata;
-	std::vector<std::string> string_filedata;
-	std::vector<double> double_filedata;*/
-
-	std::vector<std::string> fd;
-	//std::vector<std::shared_ptr<void>> fd;
-
-	bool _stable_sign; // stability result is required;
-	bool _memory_sign; // additional memory for sorting is available;
-
-	void CreateSequence(std::string data)
-	{
-		//convert text to lower case
-		std::transform(data.begin(), data.end(), data.begin(), ::tolower);
-
-		//set up and apply locale object
-		std::stringstream inputStringStream(data);
-		inputStringStream.imbue(std::locale(inputStringStream.getloc(), std::unique_ptr<ListOfSpaces>(new ListOfSpaces).release()));
-
-		std::string token;
-		//void* token;
-		//fill vector with tokens
-		while (inputStringStream >> token)
-		{
-			fd.push_back(token);
-			/*int* pi;
-			std::string* ps;
-			double* pd;
-			//fd.push_back(static_cast<std::shared_ptr<void*>>(token));
-			switch (datatype)
-			{
-			case 'i':
-			pi = reinterpret_cast<int*>(token);
-			int_filedata.push_back(*pi);
-			fd.push_back(std::make_shared<void>(int_filedata.at(int_filedata.size() - 1)));
-			break;
-			case 's':
-			ps = reinterpret_cast<std::string*>(token);
-			string_filedata.push_back(*ps);
-			fd.push_back(std::make_shared<void>(string_filedata.at(string_filedata.size() - 1)));
-			break;
-			case 'd':
-			pd = reinterpret_cast<double*>(token);
-			double_filedata.push_back(*pd);
-			fd.push_back(std::make_shared<void>(double_filedata.at(double_filedata.size() - 1)));
-			break;
-			}*/
-		}
-	}
-
-private:
-
-	//set up table of delimiters to delete
-	struct ListOfSpaces : std::ctype < char >
-	{
-		ListOfSpaces() : std::ctype<char>(DelimsTable())
-		{
-		}
-
-		static mask const* DelimsTable()
-		{
-			static mask rc[table_size];
-			rc[':'] = std::ctype_base::space;
-			rc[';'] = std::ctype_base::space;
-			rc[' '] = std::ctype_base::space;
-			rc['.'] = std::ctype_base::space;
-			rc['-'] = std::ctype_base::space;
-			rc['('] = std::ctype_base::space;
-			rc[')'] = std::ctype_base::space;
-			rc['+'] = std::ctype_base::space;
-			rc['/'] = std::ctype_base::space;
-			rc['"'] = std::ctype_base::space;
-			rc['{'] = std::ctype_base::space;
-			rc['}'] = std::ctype_base::space;
-			rc['@'] = std::ctype_base::space;
-			rc['#'] = std::ctype_base::space;
-			rc['$'] = std::ctype_base::space;
-			rc['%'] = std::ctype_base::space;
-			rc['\t'] = std::ctype_base::space;
-			rc['\n'] = std::ctype_base::space;
-			rc[';'] = std::ctype_base::space;
-			rc['~'] = std::ctype_base::space;
-			rc['¹'] = std::ctype_base::space;
-			rc['%'] = std::ctype_base::space;
-			rc['*'] = std::ctype_base::space;
-			rc['['] = std::ctype_base::space;
-			rc[']'] = std::ctype_base::space;
-			rc['='] = std::ctype_base::space;
-			rc['“'] = std::ctype_base::space;
-			rc['&'] = std::ctype_base::space;
-			rc['\''] = std::ctype_base::space;
-			rc[','] = std::ctype_base::space;
-			rc['<'] = std::ctype_base::space;
-			rc['>'] = std::ctype_base::space;
-			rc['\\'] = std::ctype_base::space;
-			rc['^'] = std::ctype_base::space;
-			rc['|'] = std::ctype_base::space;
-
-			return &rc[0];
-		}
-	};
-};
+#include "Sequence.h"
 
 class SortResult
 {
@@ -667,16 +486,16 @@ private:
 	//calculate gaps for h-sorting if 3*N > max of A102549 sequence
 	int defineMoreGaps(int n, int i) const
 	{
-		int d = 0;
+		double d = 0;
 		if (i % 2)
 		{
-			d = (8 * pow(2, i) - 6 * pow(2, (i + 1) / 2) + 1);
+			d = round((8 * pow(2, i) - 6 * pow(2, (i + 1) / 2) + 1));
 		}
 		else
 		{
-			d = (9 * pow(2, i) - 9 * pow(2, i / 2) + 1);
+			d = round((9 * pow(2, i) - 9 * pow(2, i / 2) + 1));
 		}
-		return d;
+		return (int)d;
 	}
 
 };
@@ -766,7 +585,7 @@ public:
 		_memory(1),
 		_fileObject()
 	{
-		Sequence sequence{ _fileObject.GetFileData(_srcpath), _stable, _memory};
+		Sequence sequence{ _fileObject.GetFileData(_srcpath) };
 		SortFile(sequence, _stable, _memory, 0);
 		WriteResult(sequence);
 	}
@@ -779,7 +598,7 @@ public:
 	void SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool test = 1)
 	{
 		_strategies["hs"] = std::unique_ptr<SortStrategy>(new HeapSort);
-		_strategies["ins"] = std::unique_ptr<SortStrategy> (new InsertionSort);
+		_strategies["ins"] = std::unique_ptr<SortStrategy>(new InsertionSort);
 		_strategies["ms"] = std::unique_ptr<SortStrategy>(new MergeSort);
 		_strategies["qs"] = std::unique_ptr<SortStrategy>(new QuickSort);
 		_strategies["shs"] = std::unique_ptr<SortStrategy>(new ShellSort);
@@ -839,7 +658,7 @@ private:
 				return "shs";
 			}
 		}
-		else if (sequence.fd.size() > 1000)
+		else
 		{
 			if (!_memory)
 			{
@@ -852,10 +671,7 @@ private:
 					return "hs";
 				}
 			}
-			else
-			{
-				return "ms";
-			}
+			return "ms";
 		}
 	}
 
@@ -863,7 +679,7 @@ private:
 	{
 		_fileObject.WriteToFile(_dstpath, sequence);
 		std::cout << "number of elements: " << sequence.fd.size() << '\n' << std::endl;
-		for (int i = 0; i < _sortresults.size(); ++i)
+		for (unsigned int i = 0; i < _sortresults.size(); ++i)
 		{
 			std::cout << "sorting algorithm: " << _sortresults.at(i).sorttype << std::endl;
 			std::cout << "number of moves (exchanges): " << _sortresults.at(i).moves << std::endl;
@@ -876,9 +692,9 @@ private:
 		//std::vector<std::shared_ptr<void>>::iterator cur;
 		for (cur = sequence.fd.begin(); cur < sequence.fd.end(); ++cur)
 		{
-			std::cout << *cur << std::endl;
+		std::cout << *cur << std::endl;
 		}*/
-		
+
 	}
 };
 
