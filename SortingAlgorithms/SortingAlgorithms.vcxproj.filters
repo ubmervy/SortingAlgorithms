@@ -42,14 +42,17 @@
     <ClCompile Include="HeapSortStrategy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ShellSortStrategy.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="Context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileSorter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellSortStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="FileLoader.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,14 +90,17 @@
     <ClInclude Include="HeapSortStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ShellSortStrategy.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileSorter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="FileLoader.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellSortStrategy.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
