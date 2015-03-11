@@ -201,9 +201,9 @@ class SortResult
 public:
 
 	//default constructor of SortResult
-	SortResult(std::string st = "", int dur = 0, int cm = 0, int mv = 0) :
-		sorttype(st),
+	SortResult(std::string st, double dur = 0.0, int cm = 0, int mv = 0) :
 		duration(dur),
+		sorttype(st),
 		cmp(cm),
 		moves(mv)
 	{
@@ -225,8 +225,8 @@ public:
 
 	}
 
+	double duration; // sorting time
 	std::string sorttype;
-	int duration; // sorting time
 	int cmp; // the number ofcompare 
 	int moves; // the number of moves (or swaps) 
 
@@ -256,15 +256,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		SelectionSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		sr.duration = duration;
 		return sr;
 	}
 
@@ -304,16 +303,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		InsertionSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		(*this).sr.duration = duration;
-		//std::cout << (*this).sr.duration;
 		return sr;
 	}
 
@@ -351,15 +348,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		QuickSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		sr.duration = duration;
 		return sr;
 	}
 
@@ -465,15 +461,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		MergeSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		sr.duration = duration;
 		return sr;
 	}
 
@@ -540,15 +535,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		HeapSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio<1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		sr.duration = duration;
 		return sr;
 	}
 
@@ -608,15 +602,14 @@ public:
 
 	SortResult SortSequence(Sequence &sequence) override
 	{
-		using nanoseconds = std::chrono::duration < float, std::ratio<1, 1000000000> > ;
-		std::chrono::time_point<std::chrono::system_clock> t1 = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
 		ShellSortSequence(sequence);
 
-		std::chrono::time_point<std::chrono::system_clock> t2 = std::chrono::system_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
+		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
+		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+		sr.duration = dur.count();
 
-		sr.duration = duration;
 		return sr;
 	}
 
@@ -869,16 +862,17 @@ private:
 	void WriteResult(Sequence &sequence)
 	{
 		_fileObject.WriteToFile(_dstpath, sequence);
+		std::cout << "number of elements: " << sequence.fd.size() << '\n' << std::endl;
 		for (int i = 0; i < _sortresults.size(); ++i)
 		{
-			std::cout << "sorttype: " << _sortresults.at(i).sorttype << std::endl;
-			std::cout << "exch number: " << _sortresults.at(i).moves << std::endl;
-			std::cout << "compare number: " << _sortresults.at(i).cmp << std::endl;
-			std::cout << "sorttime: " << _sortresults.at(i).duration << std::endl << std::endl;
+			std::cout << "sorting algorithm: " << _sortresults.at(i).sorttype << std::endl;
+			std::cout << "number of moves (exchanges): " << _sortresults.at(i).moves << std::endl;
+			std::cout << "number of compares: " << _sortresults.at(i).cmp << std::endl;
+			std::cout << "sorting duration: " << _sortresults.at(i).duration << std::endl << std::endl;
 			std::cout << std::endl;
 		}
 
-	/*	std::vector<std::string>::iterator cur;
+		/*std::vector<std::string>::iterator cur;
 		//std::vector<std::shared_ptr<void>>::iterator cur;
 		for (cur = sequence.fd.begin(); cur < sequence.fd.end(); ++cur)
 		{
