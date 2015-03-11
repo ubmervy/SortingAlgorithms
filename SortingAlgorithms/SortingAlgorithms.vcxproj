@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InsertionSortStrategy.cpp" />
     <ClCompile Include="SelectionSortStrategy.cpp" />
     <ClCompile Include="Sequence.cpp" />
     <ClCompile Include="SortStrategy.cpp" />
@@ -91,6 +92,7 @@
     <None Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\s.docx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="InsertionSortStrategy.h" />
     <ClInclude Include="SelectionSortStrategy.h" />
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="SortResult.h" />
