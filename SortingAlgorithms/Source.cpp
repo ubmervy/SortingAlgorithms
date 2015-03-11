@@ -20,147 +20,7 @@
 #include "InsertionSortStrategy.h"
 #include "QuickSortStrategy.h"
 #include "MergeSortStrategy.h"
-
-//class MergeSort : public SortStrategy
-//{
-//public:
-//	MergeSort(){}
-//	~MergeSort(){}
-//
-//	const std::string alg_name = "MergeSort";
-//	SortResult sr{ alg_name };
-//
-//	SortResult SortSequence(Sequence &sequence) override
-//	{
-//		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
-//
-//		MergeSortSequence(sequence);
-//
-//		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
-//		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
-//		sr.duration = dur.count();
-//
-//		return sr;
-//	}
-//
-//private:
-//
-//	void MergeSortSequence(Sequence &sequence)
-//	{
-//		int left = 0;
-//		int right = sequence.fd.size() - 1;
-//		MergeSequence(sequence, left, right);
-//	}
-//
-//	void MergeSequence(Sequence &sequence, int left, int right)
-//	{
-//		if (right <= left) return;
-//		int m = (right + left) / 2;
-//		int new_left = m + 1;
-//		MergeSequence(sequence, left, m);
-//		MergeSequence(sequence, new_left, right);
-//		merge(sequence, left, m, right);
-//	};
-//
-//	void merge(Sequence &sequence, int l, int m, int r)
-//	{
-//		int i, j;
-//		std::vector<std::string> aux(sequence.fd.size());
-//		//	static std::vector<std::shared_ptr<void*>> aux(sequence.fd.size());
-//		for (i = m + 1; i > l; --i)
-//		{
-//			aux[i - 1] = sequence.fd[i - 1];
-//			sr.moves++;
-//		}
-//		for (j = m; j < r; ++j)
-//		{
-//			aux[r + m - j] = sequence.fd[j + 1];
-//			sr.moves++;
-//		}
-//		for (int k = l; k <= r; ++k)
-//		{
-//			if (aux.at(j) < aux.at(i))
-//			{
-//				sequence.fd[k] = aux[j--];
-//				sr.cmp++;
-//				sr.moves++;
-//			}
-//			else
-//			{
-//				sequence.fd[k] = aux[i++];
-//				sr.moves++;
-//			}
-//			sr.cmp++;
-//		}
-//	}
-//};
-
-class HeapSort : public SortStrategy
-{
-public:
-	HeapSort(){}
-	~HeapSort(){}
-
-	const std::string alg_name = "HeapSort";
-	SortResult sr{ alg_name };
-
-	SortResult SortSequence(Sequence &sequence) override
-	{
-		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
-
-		HeapSortSequence(sequence);
-
-		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration< double, std::ratio<1, 1>> dur = t2 - t1;
-		sr.duration = dur.count();
-
-		return sr;
-	}
-
-private:
-	void HeapSortSequence(Sequence &sequence)
-	{
-		int k, N = sequence.fd.size() - 1;
-		int left = 0;
-		int right = sequence.fd.size() - 1;
-
-		int position_delta = left - 1;
-		for (k = N / 2; k >= 1; --k)
-		{
-			fixDown(sequence, k, N);
-		}
-		while (N > 1)
-		{
-			int begin = position_delta + 1;
-			int end = position_delta + N;
-			std::swap(sequence.fd.at(begin), sequence.fd.at(end));
-			sr.moves++;
-			fixDown(sequence, 1, --N);
-		}
-	}
-
-	void fixDown(Sequence &sequence, int k, int N)
-	{
-		while (2 * k <= N)
-		{
-			int j = 2 * k;
-			if (j < N && sequence.fd.at(j) < sequence.fd.at(j + 1))
-			{
-				j++;
-				sr.cmp += 2;
-			}
-			if (sequence.fd[k] < sequence.fd[j])
-			{
-				sr.cmp += 2;
-				break;
-			}
-			std::swap(sequence.fd[k], sequence.fd[j]);
-			sr.moves++;
-			k = j;
-		}
-	}
-
-};
+#include "HeapSortStrategy.h"
 
 class ShellSort : public SortStrategy
 {
@@ -349,7 +209,7 @@ public:
 
 	void SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool test = 1)
 	{
-		_strategies["hs"] = std::unique_ptr<SortStrategy>(new HeapSort);
+		_strategies["hs"] = std::unique_ptr<SortStrategy>(new HeapSortStrategy);
 		_strategies["ins"] = std::unique_ptr<SortStrategy>(new InsertionSortStrategy);
 		_strategies["ms"] = std::unique_ptr<SortStrategy>(new MergeSortStrategy);
 		_strategies["qs"] = std::unique_ptr<SortStrategy>(new QuickSortStrategy);

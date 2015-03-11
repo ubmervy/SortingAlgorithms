@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HeapSortStrategy.cpp" />
     <ClCompile Include="InsertionSortStrategy.cpp" />
     <ClCompile Include="MergeSortStrategy.cpp" />
     <ClCompile Include="QuickSortStrategy.cpp" />
@@ -94,6 +95,7 @@
     <None Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\s.docx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeapSortStrategy.h" />
     <ClInclude Include="InsertionSortStrategy.h" />
     <ClInclude Include="MergeSortStrategy.h" />
     <ClInclude Include="QuickSortStrategy.h" />

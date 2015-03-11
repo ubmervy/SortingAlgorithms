@@ -25,12 +25,13 @@ SortResult MergeSortStrategy::SortSequence(Sequence &sequence)
 	MergeSortSequence(sequence);
 
 	std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
-	std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
+	std::chrono::duration< double, std::ratio<1, 1>> dur = t2 - t1;
 	sr.duration = dur.count();
 
 	return sr;
 }
 
+//Sorts sequence of elements by calling MergeSequence recoursively
 void MergeSortStrategy::MergeSortSequence(Sequence &sequence)
 {
 	int left = 0;

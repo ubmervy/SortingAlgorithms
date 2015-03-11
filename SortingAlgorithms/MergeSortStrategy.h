@@ -14,8 +14,7 @@ public:
 	//destructor
 	~MergeSortStrategy();
 
-	// sorting algorithm name
-	const std::string alg_name = "Merge Sort";
+	const std::string alg_name = "Merge Sort";// sorting algorithm name
 
 	// Measures sorting time and returns SortResult
 	SortResult	SortSequence(Sequence &sequence) override;
