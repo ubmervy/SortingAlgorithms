@@ -15,16 +15,7 @@
 #include <cstring>
 #include "Sequence.h"
 #include "SortResult.h"
-
-
-class SortStrategy
-{
-public:
-	SortStrategy() {}
-	~SortStrategy() {}
-
-	virtual SortResult SortSequence(Sequence &sequence) = 0;
-};
+#include "SortStrategy.h"
 
 class SelectionSort : public SortStrategy
 {

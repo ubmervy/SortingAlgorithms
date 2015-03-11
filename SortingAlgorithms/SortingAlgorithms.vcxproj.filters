@@ -24,6 +24,9 @@
     <ClCompile Include="SortResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SortStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\demo.txt">
@@ -40,6 +43,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SortResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SortStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

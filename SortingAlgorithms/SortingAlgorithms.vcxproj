@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Sequence.cpp" />
+    <ClCompile Include="SortStrategy.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SortResult.cpp" />
   </ItemGroup>
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="Sequence.h" />
     <ClInclude Include="SortResult.h" />
+    <ClInclude Include="SortStrategy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
