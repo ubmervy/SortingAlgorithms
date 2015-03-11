@@ -42,6 +42,9 @@
     <ClCompile Include="HeapSortStrategy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShellSortStrategy.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\demo.txt">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="HeapSortStrategy.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellSortStrategy.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
