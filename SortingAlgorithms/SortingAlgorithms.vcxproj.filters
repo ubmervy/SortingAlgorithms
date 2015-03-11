@@ -21,6 +21,9 @@
     <ClCompile Include="Sequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SortResult.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\demo.txt">
@@ -34,6 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SortResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

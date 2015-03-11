@@ -15,8 +15,6 @@ public:
 	//destructor
 	~SortResult();
 
-	void SetSortType(std::string& s);
-
 	double duration; // sorting time
 	std::string sorttype; //sorting algorithm name
 	int cmp; // number of compares

@@ -14,46 +14,8 @@
 #include <thread>
 #include <cstring>
 #include "Sequence.h"
+#include "SortResult.h"
 
-class SortResult
-{
-public:
-
-	//default constructor of SortResult
-	SortResult(std::string st, double dur = 0.0, int cm = 0, int mv = 0) :
-		duration(dur),
-		sorttype(st),
-		cmp(cm),
-		moves(mv)
-	{
-		SetSortType(st);
-	}
-
-	//copy constructor of SortResult
-	SortResult(const SortResult& other_sortresult) :
-		sorttype(other_sortresult.sorttype),
-		duration(other_sortresult.duration),
-		cmp(other_sortresult.cmp),
-		moves(other_sortresult.moves)
-	{
-
-	}
-
-	~SortResult()
-	{
-
-	}
-
-	double duration; // sorting time
-	std::string sorttype;
-	int cmp; // the number ofcompare 
-	int moves; // the number of moves (or swaps) 
-
-	void SetSortType(std::string& s)
-	{
-		sorttype = s;
-	}
-};
 
 class SortStrategy
 {
@@ -71,7 +33,7 @@ public:
 	~SelectionSort(){}
 
 	const std::string alg_name = "Selection Sort";
-	SortResult sr{ alg_name };
+	SortResult sr { alg_name };
 
 	SortResult SortSequence(Sequence &sequence) override
 	{

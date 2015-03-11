@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="Sequence.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SortResult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\..\..\Мои документы\Visual Studio 2013\Projects\SortingAlgorithms\demo.txt" />
@@ -89,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sequence.h" />
+    <ClInclude Include="SortResult.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
