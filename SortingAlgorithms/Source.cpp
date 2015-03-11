@@ -24,76 +24,7 @@
 #include "HeapSortStrategy.h"
 #include "ShellSortStrategy.h"
 #include "Context.h"
-
-//class Context
-//{
-//protected:
-//	std::unique_ptr<SortStrategy> sortStrategy;
-//
-//public:
-//	Context(){}
-//	~Context(){}
-//
-//	virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
-//	virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
-//};
-
-//load text data from file, delete punctuation and create vector of words
-class FileLoader
-{
-public:
-
-	FileLoader(){};
-	FileLoader(FileLoader& other){};
-
-	~FileLoader(){};
-
-	//get string string from file data
-	std::string GetFileData(std::string& srcpath)
-	{
-		std::string data;
-		std::ifstream in(srcpath, std::ios::in);
-		data.assign((std::istreambuf_iterator<char>(in.rdbuf())), std::istreambuf_iterator<char>());
-		return data;
-	}
-
-	//write sorted data to a file
-	void WriteToFile(const std::string& dstpath, Sequence& sequence)
-	{
-		std::ofstream out(dstpath);
-		if (out.is_open())
-		{
-			std::vector<std::string>::iterator it;
-			for (it = sequence.fd.begin(); it != sequence.fd.end(); ++it)
-			{
-				out << *it << std::endl;
-			}
-			out.close();
-		}
-	}
-
-	/*CopyFromTo(std::string& srcpath, std::string& dstpath)
-		{
-		std::ifstream source(srcpath, std::ios::binary);
-		std::ofstream dest(dstpath, std::ios::binary);
-
-		// file size
-		source.seekg(0, std::ios::end);
-		std::ifstream::pos_type size = source.tellg();
-		source.seekg(0);
-		// allocate memory for buffer
-		char* buffer = new char[size];
-
-		// copy file
-		source.read(buffer, size);
-		dest.write(buffer, size);
-
-		// clean up
-		delete[] buffer;
-		source.close();
-		dest.close();
-		}*/
-};
+#include "FileLoader.h"
 
 class FileSorter : public Context
 {

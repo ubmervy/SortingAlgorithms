@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="FileLoader.cpp" />
     <ClCompile Include="HeapSortStrategy.cpp" />
     <ClCompile Include="InsertionSortStrategy.cpp" />
     <ClCompile Include="MergeSortStrategy.cpp" />
@@ -98,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Context.h" />
+    <ClInclude Include="FileLoader.h" />
     <ClInclude Include="HeapSortStrategy.h" />
     <ClInclude Include="InsertionSortStrategy.h" />
     <ClInclude Include="MergeSortStrategy.h" />
