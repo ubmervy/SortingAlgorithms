@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="InsertionSortStrategy.cpp" />
+    <ClCompile Include="MergeSortStrategy.cpp" />
     <ClCompile Include="QuickSortStrategy.cpp" />
     <ClCompile Include="SelectionSortStrategy.cpp" />
     <ClCompile Include="Sequence.cpp" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InsertionSortStrategy.h" />
+    <ClInclude Include="MergeSortStrategy.h" />
     <ClInclude Include="QuickSortStrategy.h" />
     <ClInclude Include="SelectionSortStrategy.h" />
     <ClInclude Include="Sequence.h" />
