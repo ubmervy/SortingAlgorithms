@@ -13,6 +13,7 @@
 #include <chrono>
 #include <thread>
 #include <cstring>
+
 #include "Sequence.h"
 #include "SortResult.h"
 #include "SortStrategy.h"
@@ -22,19 +23,20 @@
 #include "MergeSortStrategy.h"
 #include "HeapSortStrategy.h"
 #include "ShellSortStrategy.h"
+#include "Context.h"
 
-class Context
-{
-protected:
-	std::unique_ptr<SortStrategy> sortStrategy;
-
-public:
-	Context(){}
-	~Context(){}
-
-	virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
-	virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
-};
+//class Context
+//{
+//protected:
+//	std::unique_ptr<SortStrategy> sortStrategy;
+//
+//public:
+//	Context(){}
+//	~Context(){}
+//
+//	virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
+//	virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
+//};
 
 //load text data from file, delete punctuation and create vector of words
 class FileLoader

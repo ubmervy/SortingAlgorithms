@@ -13,7 +13,9 @@ public:
 	//destructor
 	~SortStrategy();
 
+	//Should call ApplySortStrategy method of given strategy object
 	virtual SortResult SortSequence(Sequence &sequence) = 0;
+
 };
 
 #endif // !SortStrategy_h
