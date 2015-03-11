@@ -14,12 +14,16 @@ public:
 	//destructor
 	~SelectionSortStrategy();
 
-	SortResult	SortSequence(Sequence &sequence) override;
-
+	// sorting algorithm name
 	const std::string alg_name = "Selection Sort";
-	SortResult sr{ alg_name };
+
+	// Measures sorting time and returns SortResult
+	SortResult	SortSequence(Sequence &sequence) override;
+	
+	SortResult sr{ alg_name }; //Object for storing sort results
 
 private:
+	//Sorts sequence of elements
 	void SelectionSortSequence(Sequence &sequence);
 };
 #endif // !SelectionSortStrategy_h

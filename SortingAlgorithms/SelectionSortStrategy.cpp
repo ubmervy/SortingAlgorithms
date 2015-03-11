@@ -17,6 +17,7 @@ SelectionSortStrategy::~SelectionSortStrategy()
 
 }
 
+// Measures sorting time and returns SortResult
 SortResult SelectionSortStrategy::SortSequence(Sequence &sequence)
 {
 	std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
@@ -30,6 +31,7 @@ SortResult SelectionSortStrategy::SortSequence(Sequence &sequence)
 	return sr;
 }
 
+//Sorts sequence of elements
 void SelectionSortStrategy::SelectionSortSequence(Sequence &sequence)
 {
 	int left = 0;
