@@ -16,52 +16,7 @@
 #include "Sequence.h"
 #include "SortResult.h"
 #include "SortStrategy.h"
-
-class SelectionSort : public SortStrategy
-{
-public:
-	SelectionSort(){}
-	~SelectionSort(){}
-
-	const std::string alg_name = "Selection Sort";
-	SortResult sr { alg_name };
-
-	SortResult SortSequence(Sequence &sequence) override
-	{
-		std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
-
-		SelectionSortSequence(sequence);
-
-		std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
-		std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
-		sr.duration = dur.count();
-
-		return sr;
-	}
-
-private:
-	void SelectionSortSequence(Sequence &sequence)
-	{
-		int left = 0;
-		int right = sequence.fd.size() - 1;
-		for (int i = left; i <= right; i++)
-		{
-			int min = i;
-			for (int j = i + 1; j <= right; j++)
-			{
-				if (sequence.fd.at(j) < sequence.fd.at(min))
-				{
-					min = j;
-					sr.cmp++;
-				}
-				sr.cmp++;
-			}
-			std::swap(sequence.fd.at(i), sequence.fd.at(min));
-			sr.moves++;
-		}
-		sr.cmp += 2;
-	}
-};
+#include "SelectionSortStrategy.h"
 
 class InsertionSort : public SortStrategy
 {
@@ -555,7 +510,7 @@ public:
 		_strategies["ms"] = std::unique_ptr<SortStrategy>(new MergeSort);
 		_strategies["qs"] = std::unique_ptr<SortStrategy>(new QuickSort);
 		_strategies["shs"] = std::unique_ptr<SortStrategy>(new ShellSort);
-		_strategies["sls"] = std::unique_ptr<SortStrategy>(new SelectionSort);
+		_strategies["sls"] = std::unique_ptr<SortStrategy>(new SelectionSortStrategy);
 
 		if (test)
 		{
