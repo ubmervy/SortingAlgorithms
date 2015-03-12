@@ -15,7 +15,7 @@ public:
 	//destructor
 	~QuickSortStrategy();
 
-	const std::string alg_name = "Quick Sort";// sorting algorithm name
+	const std::string alg_name = "Quick";// sorting algorithm name
 
 	// Measures sorting time and returns SortResult
 	SortResult	SortSequence(Sequence &sequence) override;

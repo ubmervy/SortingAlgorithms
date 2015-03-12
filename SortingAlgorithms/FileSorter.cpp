@@ -16,28 +16,27 @@
 #include <sstream>
 #include <string.h>
 #include <stdio.h>
-#include <conio.h>
 #include <vector>
 #include <map>
 #include <algorithm>
 #include <locale.h>
 #include <memory>
 #include <stack>
-#include <chrono>
-#include <thread>
 #include <cstring>
 
 //constructor
-FileSorter::FileSorter(std::string& srcpath, std::string& dstpath, bool stable = 1) :
+FileSorter::FileSorter(std::string &srcpath, std::string &dstpath, bool stable) :
 _sortresults{},
 _strategies{},
 _srcpath(srcpath),
 _dstpath(dstpath),
 _stable(stable),
 _memory(1),
-_fileObject()
+_fileObject{}
 {
-	Sequence sequence{ _fileObject.GetFileData(_srcpath) };
+	std::string d = _fileObject.GetFileData(_srcpath);
+	Sequence sequence{ d };
+	_recommendedStrategy = RecommendStrategy(sequence);
 	SortFile(sequence, _stable, _memory, 0);
 	WriteResult(sequence);
 }
@@ -51,21 +50,23 @@ FileSorter::~FileSorter()
 //Initiates and manages sorting process
 void FileSorter::SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, bool test = 1)
 {
-	_strategies["hs"] = std::unique_ptr<SortStrategy>(new HeapSortStrategy);
-	_strategies["ins"] = std::unique_ptr<SortStrategy>(new InsertionSortStrategy);
-	_strategies["ms"] = std::unique_ptr<SortStrategy>(new MergeSortStrategy);
-	_strategies["qs"] = std::unique_ptr<SortStrategy>(new QuickSortStrategy);
-	_strategies["shs"] = std::unique_ptr<SortStrategy>(new ShellSortStrategy);
-	_strategies["sls"] = std::unique_ptr<SortStrategy>(new SelectionSortStrategy);
+	_strategies["Heap"] = std::unique_ptr<SortStrategy>(new HeapSortStrategy);
+	_strategies["Insertion"] = std::unique_ptr<SortStrategy>(new InsertionSortStrategy);
+	_strategies["Merge"] = std::unique_ptr<SortStrategy>(new MergeSortStrategy);
+	_strategies["Quick"] = std::unique_ptr<SortStrategy>(new QuickSortStrategy);
+	_strategies["Shell"] = std::unique_ptr<SortStrategy>(new ShellSortStrategy);
+	_strategies["Selection"] = std::unique_ptr<SortStrategy>(new SelectionSortStrategy);
 
-	if (test)
+	
+
+	/*if (test)
 	{
 		std::unique_ptr<SortStrategy> recommendedStrategy = std::move(_strategies[RecommendStrategy(sequence)]);
 		SetSortStrategy(recommendedStrategy);
 		_sortresults.push_back(ApplySortStrategy(sequence));
 	}
 	else
-	{
+	{*/
 
 		std::map<std::string, std::unique_ptr<SortStrategy>>::iterator it;
 		for (it = _strategies.begin(); it != _strategies.end(); ++it)
@@ -74,7 +75,7 @@ void FileSorter::SortFile(Sequence &sequence, bool stable = 1, bool memory = 1, 
 			SetSortStrategy(currentStrategy);
 			_sortresults.push_back(ApplySortStrategy(sequence));
 		}
-	}
+	//}
 }
 
 	//Sets context according to given SortStrategy object
@@ -95,17 +96,17 @@ std::string FileSorter::RecommendStrategy(Sequence &sequence)
 {
 	if (sequence.fd.size() < 100)
 	{
-		return "ins";
+		return "Insertion";
 	}
 	else if (sequence.fd.size() > 100 && sequence.fd.size() < 1000)
 	{
 		if (_stable)
 		{
-			return "qs";
+			return "Quick";
 		}
 		else
 		{
-			return "shs";
+			return "Shell";
 		}
 	}
 	else
@@ -114,28 +115,35 @@ std::string FileSorter::RecommendStrategy(Sequence &sequence)
 		{
 			if (_stable)
 			{
-				return "qs";
+				return "Quick";
 			}
 			else
 			{
-				return "hs";
+				return "Heap";
 			}
 		}
-		return "ms";
+		return "Merge";
 	}
 }
 
 	//Writes results of sorting - to output file and on the screen
 void FileSorter::WriteResult(Sequence &sequence)
 {
+	// write sorted sequence to file at _dstpath
 	_fileObject.WriteToFile(_dstpath, sequence);
+
+	// print statistics 
 	std::cout << "number of elements: " << sequence.fd.size() << '\n' << std::endl;
+
+	if(_stable) std::cout << "stable sorting is required" << '\n' << std::endl;
+
 	for (unsigned int i = 0; i < _sortresults.size(); ++i)
 	{
-		std::cout << "sorting algorithm: " << _sortresults.at(i).sorttype << std::endl;
+		if (_sortresults.at(i).sorttype == _recommendedStrategy) std::cout << "sorting algorithm: " << _sortresults.at(i).sorttype << " Sort (recommended)" << std::endl;
+			else std::cout << "sorting algorithm: " << _sortresults.at(i).sorttype << " Sort" << std::endl;
 		std::cout << "number of moves (exchanges): " << _sortresults.at(i).moves << std::endl;
 		std::cout << "number of compares: " << _sortresults.at(i).cmp << std::endl;
-		std::cout << "sorting duration: " << _sortresults.at(i).duration << std::endl << std::endl;
+		std::cout << "sorting duration: " << _sortresults.at(i).duration << " sec" << std::endl << std::endl;
 		std::cout << std::endl;
 	}
 

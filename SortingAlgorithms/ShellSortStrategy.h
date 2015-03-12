@@ -14,7 +14,7 @@ public:
 	//destructor
 	~ShellSortStrategy();
 
-	const std::string alg_name = "Shell Sort";// sorting algorithm name
+	const std::string alg_name = "Shell";// sorting algorithm name
 
 	// Measures sorting time and returns SortResult
 	SortResult	SortSequence(Sequence &sequence) override;

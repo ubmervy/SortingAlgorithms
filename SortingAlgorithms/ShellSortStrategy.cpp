@@ -4,6 +4,7 @@
 #include "SortResult.h"
 #include "Sequence.h"
 #include <chrono>
+#include <math.h>
 
 //constructor
 ShellSortStrategy::ShellSortStrategy()

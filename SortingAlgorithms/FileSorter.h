@@ -6,6 +6,7 @@
 #include "Sequence.h"
 #include "SortResult.h"
 #include "SortStrategy.h"
+#include "ListOfSpaces.h"
 #include <map>
 #include <vector>
 #include <string>
@@ -15,7 +16,7 @@ class FileSorter : public Context
 {
 public:
 	//constructor
-	FileSorter(std::string& srcpath, std::string& dstpath, bool stable);
+	FileSorter(std::string &srcpath, std::string &dstpath, bool stable);
 
 	//destructor
 	~FileSorter();
@@ -23,6 +24,8 @@ public:
 	std::map<std::string, std::unique_ptr<SortStrategy>> _strategies; // map of all strategies available
 
 	std::vector<SortResult> _sortresults; // vector of all results available after sorting
+
+	std::string _recommendedStrategy; //recommended sorting algorithm
 
 	//Initiates and manages sorting process
 	void SortFile(Sequence &sequence, bool stable, bool memory, bool test);

@@ -14,7 +14,7 @@ public:
 	//destructor
 	~InsertionSortStrategy();
 
-	const std::string alg_name = "Insertion Sort"; // sorting algorithm name
+	const std::string alg_name = "Insertion"; // sorting algorithm name
 
 	// Measures sorting time and returns SortResult
 	SortResult SortSequence(Sequence &sequence) override;

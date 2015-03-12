@@ -1,11 +1,13 @@
 //Sequence.cpp
-#include "Sequence.h";
-#include <iostream>;
-#include <algorithm>;
-#include <sstream>;
-#include <locale.h>;
-#include <vector>;
-#include <memory>;
+#include "Sequence.h"
+#include "ListOfSpaces.h"
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <locale>
+#include <vector>
+#include <memory>
+#include <ctype.h>
 
 //constructor
 Sequence::Sequence(std::string &data)
@@ -54,7 +56,7 @@ void Sequence::CreateSequence(std::string data)
 
 	//set up and apply locale object
 	std::stringstream inputStringStream(data);
-	inputStringStream.imbue(std::locale(inputStringStream.getloc(), std::unique_ptr<ListOfSpaces>(new Sequence::ListOfSpaces).release()));
+	inputStringStream.imbue(std::locale(inputStringStream.getloc(), std::unique_ptr<ListOfSpaces_NS::ListOfSpaces>(new ListOfSpaces_NS::ListOfSpaces()).release()));
 
 	std::string token;
 	while (inputStringStream >> token)

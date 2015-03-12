@@ -14,7 +14,7 @@ public:
 	//destructor
 	~HeapSortStrategy();
 
-	const std::string alg_name = "Heap Sort";// sorting algorithm name
+	const std::string alg_name = "Heap";// sorting algorithm name
 
 	// Measures sorting time and returns SortResult
 	SortResult	SortSequence(Sequence &sequence) override;

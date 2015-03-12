@@ -4,6 +4,9 @@
 
 #include <string>
 #include <vector>
+#include <stdlib.h>
+#include <ctype.h>
+#include "ListOfSpaces.h"
 
 class Sequence
 {
@@ -33,57 +36,8 @@ private:
 	void swap(Sequence &other_sequence) throw ();
 
 	//release vector of elements
-	void Sequence::release(Sequence &other_sequence);
-
-	//set up table of delimiters to delete
-	struct ListOfSpaces : std::ctype < char >
-	{
-		Sequence::ListOfSpaces() : std::ctype<char>(DelimsTable())
-		{
-		}
-
-		static mask const* DelimsTable()
-		{
-			static mask rc[table_size];
-			rc[':'] = std::ctype_base::space;
-			rc[';'] = std::ctype_base::space;
-			rc[' '] = std::ctype_base::space;
-			rc['.'] = std::ctype_base::space;
-			rc['-'] = std::ctype_base::space;
-			rc['('] = std::ctype_base::space;
-			rc[')'] = std::ctype_base::space;
-			rc['+'] = std::ctype_base::space;
-			rc['/'] = std::ctype_base::space;
-			rc['"'] = std::ctype_base::space;
-			rc['{'] = std::ctype_base::space;
-			rc['}'] = std::ctype_base::space;
-			rc['@'] = std::ctype_base::space;
-			rc['#'] = std::ctype_base::space;
-			rc['$'] = std::ctype_base::space;
-			rc['%'] = std::ctype_base::space;
-			rc['\t'] = std::ctype_base::space;
-			rc['\n'] = std::ctype_base::space;
-			rc[';'] = std::ctype_base::space;
-			rc['~'] = std::ctype_base::space;
-			rc['¹'] = std::ctype_base::space;
-			rc['%'] = std::ctype_base::space;
-			rc['*'] = std::ctype_base::space;
-			rc['['] = std::ctype_base::space;
-			rc[']'] = std::ctype_base::space;
-			rc['='] = std::ctype_base::space;
-			rc['“'] = std::ctype_base::space;
-			rc['&'] = std::ctype_base::space;
-			rc['\''] = std::ctype_base::space;
-			rc[','] = std::ctype_base::space;
-			rc['<'] = std::ctype_base::space;
-			rc['>'] = std::ctype_base::space;
-			rc['\\'] = std::ctype_base::space;
-			rc['^'] = std::ctype_base::space;
-			rc['|'] = std::ctype_base::space;
-
-			return &rc[0];
-		}
-	};
+	void release(Sequence &other_sequence);
 };
+
 
 #endif // !Sequence_h
