@@ -7,14 +7,14 @@
 class SortStrategy
 {
 public:
-	//constructor
-	SortStrategy();
+    //constructor
+    SortStrategy();
 
-	//destructor
-	~SortStrategy();
+    //destructor
+    ~SortStrategy();
 
-	//Should call ApplySortStrategy method of given strategy object
-	virtual SortResult SortSequence(Sequence &sequence) = 0;
+    //Should call ApplySortStrategy method of given strategy object
+    virtual SortResult SortSequence(Sequence &sequence) = 0;
 
 };
 

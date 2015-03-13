@@ -7,22 +7,22 @@
 class FileLoader
 {
 public:
-	//constructor
-	FileLoader();
+    //constructor
+    FileLoader();
 
-	//copy constructor
-	FileLoader(FileLoader& other);
+    //copy constructor
+    FileLoader(FileLoader& other);
 
-	//destructor
-	~FileLoader();
+    //destructor
+    ~FileLoader();
 
-	//Gets string of file content
-	std::string GetFileData(std::string& srcpath);
+    //Gets string of file content
+    std::string GetFileData(std::string& srcpath);
 
-	//Write sorted data to file at dstpath
-	void WriteToFile(const std::string& dstpath, Sequence& sequence);
+    //Write sorted data to file at dstpath
+    void WriteToFile(const std::string& dstpath, Sequence& sequence);
 
-	/*CopyFromTo(std::string& srcpath, std::string& dstpath)*/
+    /*CopyFromTo(std::string& srcpath, std::string& dstpath)*/
 };
 
 #endif // !FileLoader_h

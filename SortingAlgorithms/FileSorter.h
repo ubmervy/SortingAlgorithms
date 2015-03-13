@@ -15,39 +15,42 @@
 class FileSorter : public Context
 {
 public:
-	//constructor
-	FileSorter(std::string &srcpath, std::string &dstpath, bool stable);
+    //constructor
+    FileSorter(std::string &srcpath, std::string &dstpath, bool stable);
 
-	//destructor
-	~FileSorter();
+    //destructor
+    ~FileSorter();
 
-	std::map<std::string, std::unique_ptr<SortStrategy>> _strategies; // map of all strategies available
+    std::map<std::string, std::unique_ptr<SortStrategy>> _strategies; // map of all strategies available
 
-	std::vector<SortResult> _sortresults; // vector of all results available after sorting
+    std::vector<SortResult> _sortresults; // vector of all results available after sorting
 
-	std::string _recommendedStrategy; //recommended sorting algorithm
+    std::string _recommendedStrategy; //recommended sorting algorithm
 
-	//Initiates and manages sorting process
-	void SortFile(Sequence &sequence, bool stable, bool memory, bool test);
+    //Initiates and manages sorting process
+    void SortFile(Sequence &sequence, bool stable, int _duplicated_keys, bool test);
 
 private:
-	std::string _srcpath; // path to input file
-	std::string _dstpath; // path to output file
-	bool _stable; // stable sorting required sign
-	bool _memory; // extra disk memory available for sorting input sequence
-	FileLoader _fileObject; // object for serialization
+    std::string _srcpath; // path to input file
+    std::string _dstpath; // path to output file
+    bool _stable; // stable sorting required sign
+    int _duplicated_keys; // input sequence has more than 25% of duplicated words
+    FileLoader _fileObject; // object for serialization
 
-	//Sets context according to given SortStrategy object
-	void SetSortStrategy(std::unique_ptr<SortStrategy> &strategy) override;
+    //Sets context according to given SortStrategy object
+    void SetSortStrategy(std::unique_ptr<SortStrategy> &strategy) override;
 
-	//Applies SortSequence method according to current context
-	SortResult ApplySortStrategy(Sequence &sequence) override;
+    //Applies SortSequence method according to current context
+    SortResult ApplySortStrategy(Sequence &sequence) override;
 
-	//Analizes which algorithm suits best for sorting input sequence
-	std::string RecommendStrategy(Sequence &sequence);
+    //Analizes which algorithm suits best for sorting input sequence
+    std::string RecommendStrategy(Sequence &sequence);
 
-	//Writes results of sorting - to output file and on the screen
-	void WriteResult(Sequence &sequence);
+    //Writes results of sorting - to output file and on the screen
+    void WriteResult(Sequence &sequence);
+
+    //bool Compare_duration (SortResult* i,SortResult* j);
+    int GetDuplicatesPercent(Sequence &sequence);
 };
 
 #endif // !FileSorter_h

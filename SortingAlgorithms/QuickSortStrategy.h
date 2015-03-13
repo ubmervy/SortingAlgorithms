@@ -9,27 +9,27 @@
 class QuickSortStrategy : public SortStrategy
 {
 public:
-	//constructor
-	QuickSortStrategy();
+    //constructor
+    QuickSortStrategy();
 
-	//destructor
-	~QuickSortStrategy();
+    //destructor
+    ~QuickSortStrategy();
 
-	const std::string alg_name = "Quick";// sorting algorithm name
+    const std::string alg_name = "Quick";// sorting algorithm name
 
-	// Measures sorting time and returns SortResult
-	SortResult	SortSequence(Sequence &sequence) override;
+    // Measures sorting time and returns SortResult
+    SortResult	SortSequence(Sequence &sequence) override;
 
-	SortResult sr{ alg_name }; //Object for storing sort results
+    SortResult sr { alg_name }; //Object for storing sort results
 
 private:
-	//Sorts sequence of elements
-	void QuickSortSequence(Sequence &sequence);
+    //Sorts sequence of elements
+    void QuickSortSequence(Sequence &sequence);
 
-	//Gets pivot element for quicksort
-	int MakePartition(Sequence &sequence, int left, int right);
+    //Gets pivot element for quicksort
+    int MakePartition(Sequence &sequence, int left, int right);
 
-	//Pushes to stack minimal part of divided sequence to minimize stack size
-	void PushToStack(std::stack<int> &s, int &A, int &B) const;
+    //Pushes to stack minimal part of divided sequence to minimize stack size
+    void PushToStack(std::stack<int> &s, int &A, int &B) const;
 };
 #endif // !QuickSortStrategy_h

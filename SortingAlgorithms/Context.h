@@ -9,20 +9,20 @@
 class Context
 {
 public:
-	//constructor
-	Context();
+    //constructor
+    Context();
 
-	//destructor
-	~Context();
+    //destructor
+    ~Context();
 
-	//Should set sorting algorithm
-	virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
+    //Should set sorting algorithm
+    virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
 
-	//Should apply sorting algorithm
-	virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
+    //Should apply sorting algorithm
+    virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
 
 protected:
-	std::unique_ptr<SortStrategy> sortStrategy; //points to chosen SortStrategy object
+    std::unique_ptr<SortStrategy> sortStrategy; //points to chosen SortStrategy object
 };
 
 #endif // !Context_h

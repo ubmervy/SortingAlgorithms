@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <stdlib.h>
 #include <ctype.h>
 #include "ListOfSpaces.h"
@@ -11,32 +12,36 @@
 class Sequence
 {
 public:
-	//constructor
-	Sequence(std::string &data);
+    //constructor
+    Sequence(std::string &data);
 
-	//copy constructor
-	Sequence(const Sequence& other_sequence);
+    //copy constructor
+    Sequence(const Sequence& other_sequence);
 
-	//move constructor
-	Sequence(Sequence&& other_sequence);
+    //move constructor
+    Sequence(Sequence&& other_sequence);
 
-	//Destructor
-	~Sequence();
+    //Destructor
+    ~Sequence();
 
-	//operator = for copying data from assigned object 
-	//Sequence operator=(Sequence&& other_sequence);
+    //operator = for copying data from assigned object
+    //Sequence operator=(Sequence&& other_sequence);
 
-	//sequence of file elements
-	std::vector<std::string> fd;
+    //sequence of file elements
+    std::vector<std::string> fd;
+
+    //sequence of file unique elements
+    std::map<std::string, int> fd_unique;
+
 private:
-	//parse file data into vector
-	void CreateSequence(std::string data);
+    //parse file data into vector
+    void CreateSequence(std::string data);
 
-	//swap method for move constructor
-	void swap(Sequence &other_sequence) throw ();
+    //swap method for move constructor
+    void swap(Sequence &other_sequence) throw ();
 
-	//release vector of elements
-	void release(Sequence &other_sequence);
+    //release vector of elements
+    void release(Sequence &other_sequence);
 };
 
 

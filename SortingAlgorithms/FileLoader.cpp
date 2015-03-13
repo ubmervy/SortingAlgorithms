@@ -27,25 +27,25 @@ FileLoader::~FileLoader()
 //Gets string of file content
 std::string FileLoader::GetFileData(std::string& srcpath)
 {
-	std::string data;
-	std::ifstream in(srcpath, std::ios::in);
-	data.assign((std::istreambuf_iterator<char>(in.rdbuf())), std::istreambuf_iterator<char>());
-	return data;
+    std::string data;
+    std::ifstream in(srcpath, std::ios::in);
+    data.assign((std::istreambuf_iterator<char>(in.rdbuf())), std::istreambuf_iterator<char>());
+    return data;
 }
 
 //Write sorted data to file at dstpath
 void FileLoader::WriteToFile(const std::string& dstpath, Sequence& sequence)
 {
-	std::ofstream out(dstpath);
-	if (out.is_open())
-	{
-		std::vector<std::string>::iterator it;
-		for (it = sequence.fd.begin(); it != sequence.fd.end(); ++it)
-		{
-			out << *it << std::endl;
-		}
-		out.close();
-	}
+    std::ofstream out(dstpath);
+    if (out.is_open())
+    {
+        std::vector<std::string>::iterator it;
+        for (it = sequence.fd.begin(); it != sequence.fd.end(); ++it)
+        {
+            out << *it << std::endl;
+        }
+        out.close();
+    }
 }
 
 /*
