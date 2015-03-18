@@ -27,7 +27,7 @@
 int main(int argc, char* argv[])
 {
     std::string inFilePath;
-    std::string outFilePath = "sorted.txt";
+    std::string outFilePath = "../bin/sorted.txt";
     bool stable = false;
     bool recommend = false;
 
