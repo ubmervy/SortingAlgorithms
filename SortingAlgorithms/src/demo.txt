@@ -1,0 +1,103 @@
+5.3.1 Альтернативные реализации
+Пока  описание  общей  части  класса и функций-членов остается неизменным, можно, не влияя на
+пользователей класса, менять его реализацию. В подтверждение этого рассмотрим таблицу имен из
+программы калькулятора, приведенной в главе3. Структура ее такова: 
+struct name { 
+char* string; 
+name* next; 
+double value; 
+}; 
+А вот вариант классаtable (таблица имен): 
+// файлtable.h 
+class table { 
+name* tbl; 
+public: 
+table() { tbl = 0; } 
+name* look(char*, int = 0); 
+name* insert(char* s) { return look(s,1); } 
+}; 
+Эта  таблица  отличается  от  определенной  в  главе3 тем, что это настоящий тип. Можно описать
+несколько таблиц, завести указатель на таблицу и т.д. Например: 
+#include "table.h" 
+table globals; 
+table keywords; 
+table* locals; 
+main() 
+{ 
+locals = new table; 
+// ... 
+} 
+Приведем реализацию функцииtable::look(), в которой используется линейный поиск в списке имен
+таблицы: 
+#include <string.h> 
+name* table::look(char* p, int ins) 
+{ 
+for (name* n = tbl; n; n=n->next) 
+if (strcmp(p,n->string) == 0) return n; 
+if (ins == 0) error("имя не найдено"); 
+name* nn = new name; 
+nn->string = new char[strlen(p)+1]; 
+strcpy(nn->string,p); 
+nn->value = 1; 
+nn->next = tbl; 
+tbl = nn; 
+return nn; 
+} 
+Теперь усовершенствуем классtable так, чтобы поиск имени шел по ключу(хэш-функции от имени), как
+это и было сделано в примере с калькулятором. Сделать это труднее, если соблюдать ограничение, 
+требующее, чтобы не все программы, использующие приведенную версию классаtable, надо было 
+Бьерн Страуструп.  Язык программирования С++ 
+131
+изменять: 
+class table { 
+name** tbl; 
+int size; 
+public: 
+table(int sz = 15); 
+~table(); 
+name* look(char*, int = 0); 
+name* insert(char* s) { return look(s,1); } 
+}; 
+Изменения  в  структуре  данных  и  конструкторе  произошли  потому,  что  для  хэширования  таблица
+должна иметь определенный размер. Задание конструктора со стандартным значением параметра
+гарантирует, что старые программы, в которых не использовался размер таблицы, останутся верными. 
+Стандартные значения параметров полезны в таких случаях, когда нужно изменить класс, не влияя на
+программы  пользователей  класса.  Теперь  конструктор  и  деструктор  создают  и  уничтожают
+хэшированные таблицы: 
+table::table(int sz) 
+{ 
+if (sz < 0) error("размер таблицы отрицателен");
+tbl = new name*[size = sz]; 
+for ( int i = 0; i<sz; i++) tbl[i] = 0; 
+} 
+table::~table() 
+{ 
+for (int i = 0; i<size; i++) { 
+name* nx; 
+for (name* n = tbl[i]; n; n=nx) { 
+nx = n->next; 
+delete n->string; 
+delete n; 
+} 
+} 
+delete tbl; 
+} 
+Описав деструктор для классаname, можно получить более ясный и простой вариантtable::~table(). 
+Функция поиска практически совпадает с приведенной в примере калькулятора($$3.13): 
+name* table::look(const char* p, int ins) 
+{ 
+int ii = 0; 
+char* pp = p; 
+while (*pp) ii = ii<<1 ^ *pp++; 
+if (ii < 0) ii = -ii; 
+ii %= size; 
+for (name* n=tbl[ii]; n; n=n->next) 
+if (strcmp(p,n->string) == 0) return n; 
+name* nn = new name; 
+nn->string = new char[strlen(p)+1]; 
+strcpy(nn->string,p); 
+nn->value = 1; 
+nn->next = tbl[ii]; 
+tbl[ii] = nn; 
+return nn; 
+} 

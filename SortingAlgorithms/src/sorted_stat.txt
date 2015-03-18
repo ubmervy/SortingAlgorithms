@@ -1,0 +1,26 @@
+Words number: 465
+Unique words: 43%
+
+Duration: 
+Heap Sort: 6.3383e-05 sec
+Shell Sort: 0.000106837 sec
+Quick Sort: 0.00118628 sec
+Insertion Sort: 0.00155089 sec
+Selection Sort: 0.00320733 sec
+Merge Sort: 0.00321144 sec
+
+Compares: 
+Heap Sort: 2460
+Shell Sort: 5126
+Quick Sort: 73908
+Insertion Sort: 94998
+Selection Sort: 107882
+Merge Sort: 5383
+
+Moves (exchanges): 
+Heap Sort: 699
+Shell Sort: 2563
+Quick Sort: 704
+Insertion Sort: 47499
+Selection Sort: 465
+Merge Sort: 8276
