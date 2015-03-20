@@ -28,11 +28,11 @@
 #include <sstream>
 
 //constructor
-FileSorter::FileSorter(Sequence &sequence, bool stable, bool recommend) :
+FileSorter::FileSorter(Sequence &sequence, int bound, bool stable, bool recommend) :
 _stable(stable),
 _recommend(recommend)
 {
-    SortFile(sequence);
+    SortFile(sequence, bound);
 }
 
 //destructor
@@ -42,7 +42,7 @@ FileSorter::~FileSorter()
 }
 
 //performes sorting process
-void FileSorter::SortFile(Sequence &sequence)
+void FileSorter::SortFile(Sequence &sequence, int bound)
 {
     _strategies["Heap"] = std::unique_ptr<SortStrategy>(new HeapSortStrategy);
     _strategies["Insertion"] = std::unique_ptr<SortStrategy>(new InsertionSortStrategy);
@@ -57,7 +57,7 @@ void FileSorter::SortFile(Sequence &sequence)
         _recommendedStrategy = RecommendStrategy(sequence);
         std::unique_ptr<SortStrategy> recommendedStrategy = std::move(_strategies[RecommendStrategy(sequence)]);
         SetSortStrategy(recommendedStrategy);
-        _sortresults.push_back(ApplySortStrategy(sequence));
+        _sortresults.push_back(ApplySortStrategy(sequence, bound));
     }
     else
     {
@@ -65,12 +65,12 @@ void FileSorter::SortFile(Sequence &sequence)
         std::map<std::string, std::unique_ptr<SortStrategy>>::iterator it;
         for (it = _strategies.begin(); it != _strategies.end(); ++it)
         {
-            std::unique_ptr<SortStrategy> currentStrategy = std::move((*it).second);;
+            std::unique_ptr<SortStrategy> currentStrategy = std::move((*it).second);
             SetSortStrategy(currentStrategy);
-            _sortresults.push_back(ApplySortStrategy(sequence));
+            _sortresults.push_back(ApplySortStrategy(sequence, bound));
         }
     //sorts results by duration
-    std::sort(_sortresults.begin(), _sortresults.end());
+    //std::sort(_sortresults.begin(), _sortresults.end());
     }
 
 }
@@ -83,9 +83,9 @@ void FileSorter::SetSortStrategy(std::unique_ptr<SortStrategy> &strategy)
 }
 
 //Applies SortSequence method according to current context
-SortResult FileSorter::ApplySortStrategy(Sequence &sequence)
+SortResult FileSorter::ApplySortStrategy(Sequence &sequence, int bound)
 {
-    return sortStrategy->SortSequence(sequence);
+    return sortStrategy->SortSequence(sequence, bound);
 }
 
 //Decides which algorithm suits best for sorting input sequence

@@ -17,13 +17,13 @@ public:
     const std::string alg_name = "Insertion"; // sorting algorithm name
 
     // Measures sorting time and returns SortResult
-    SortResult SortSequence(Sequence &sequence) override;
+    SortResult SortSequence(Sequence &sequence, int bound) override;
 
     SortResult sr { alg_name }; //Object for storing sort results
 
 private:
     //Sort sequence of elements
-    void InsertionSortSequence(Sequence &sequence);
+    void InsertionSortSequence(Sequence &sequence, int bound);
 };
 
 #endif // !InsertionSortStrategy_h

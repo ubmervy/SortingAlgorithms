@@ -14,7 +14,7 @@ class FileSorter : public Context
 {
 public:
     //constructor
-    FileSorter(Sequence& sequence, bool stable, bool recommend);
+    FileSorter(Sequence& sequence, int bound, bool stable, bool recommend);
 
     //destructor
     ~FileSorter();
@@ -26,7 +26,7 @@ public:
     bool _recommend; // auto sort algorithm selection sign
 
     //performes sorting process
-    void SortFile(Sequence &sequence);
+    void SortFile(Sequence &sequence, int bound);
 
 private:
 
@@ -34,7 +34,7 @@ private:
     void SetSortStrategy(std::unique_ptr<SortStrategy> &strategy) override;
 
     //Applies SortSequence method according to current context
-    SortResult ApplySortStrategy(Sequence &sequence) override;
+    SortResult ApplySortStrategy(Sequence &sequence, int bound) override;
 
     //Analizes which algorithm suits best for sorting input sequence
     std::string RecommendStrategy(Sequence &sequence);

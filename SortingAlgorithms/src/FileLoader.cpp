@@ -2,6 +2,7 @@
 #include "../h/FileLoader.h"
 #include "../h/Sequence.h"
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 
@@ -62,19 +63,19 @@ void FileLoader::WriteStatToFile(const std::string& dstpath_stat, Sequence &sequ
         outstat << "Duration: " << std::endl;
         for (unsigned int i = 0; i < filesorter._sortresults.size(); ++i)
         {
-            outstat << filesorter._sortresults.at(i)._sorttype << " Sort: "<< filesorter._sortresults.at(i)._duration << " sec" << std::endl;
+            outstat << std::setw(10) << std::left << filesorter._sortresults.at(i)._sorttype << '\t' << filesorter._sortresults.at(i)._duration << " sec" << std::endl;
         }
         outstat << std::endl;
         outstat << "Compares: " << std::endl;
         for (unsigned int i = 0; i < filesorter._sortresults.size(); ++i)
         {
-            outstat << filesorter._sortresults.at(i)._sorttype << " Sort: "<< filesorter._sortresults.at(i)._cmp << std::endl;
+            outstat << std::setw(10) << std::left << filesorter._sortresults.at(i)._sorttype << '\t' << filesorter._sortresults.at(i)._cmp << std::endl;
         }
         outstat << std::endl;
         outstat << "Moves (exchanges): " << std::endl;
         for (unsigned int i = 0; i < filesorter._sortresults.size(); ++i)
         {
-            outstat << filesorter._sortresults.at(i)._sorttype << " Sort: "<< filesorter._sortresults.at(i)._moves << std::endl;
+            outstat << std::setw(10) << std::left << filesorter._sortresults.at(i)._sorttype << '\t' << filesorter._sortresults.at(i)._moves << std::endl;
         }
         outstat.close();
     }

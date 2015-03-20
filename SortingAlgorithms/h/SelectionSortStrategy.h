@@ -17,12 +17,12 @@ public:
     const std::string alg_name = "Selection";// sorting algorithm name
 
     // Measures sorting time and returns SortResult
-    SortResult	SortSequence(Sequence &sequence) override;
+    SortResult	SortSequence(Sequence &sequence, int bound) override;
 
     SortResult sr { alg_name }; //Object for storing sort results
 
 private:
     //Sorts sequence of elements
-    void SelectionSortSequence(Sequence &sequence);
+    void SelectionSortSequence(Sequence &sequence, int bound);
 };
 #endif // !SelectionSortStrategy_h

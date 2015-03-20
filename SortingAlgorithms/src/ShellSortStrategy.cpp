@@ -19,11 +19,11 @@ ShellSortStrategy::~ShellSortStrategy()
 }
 
 // Measures sorting time and returns SortResult
-SortResult ShellSortStrategy::SortSequence(Sequence &sequence)
+SortResult ShellSortStrategy::SortSequence(Sequence &sequence, int bound)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
-    ShellSortSequence(sequence);
+    ShellSortSequence(sequence, bound);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration< double, std::ratio<1, 1>> dur = t2 - t1;
@@ -33,11 +33,11 @@ SortResult ShellSortStrategy::SortSequence(Sequence &sequence)
 }
 
 //Sorts sequence of elements
-void ShellSortStrategy::ShellSortSequence(Sequence &sequence)
+void ShellSortStrategy::ShellSortSequence(Sequence &sequence, int bound)
 {
     int cm[] = { 1750, 701, 301, 132, 57, 23, 10, 4, 1 }; // Ì.Ciura’s sequence for Shell sort
     int left = 0;
-    int right = sequence.fd.size() - 1;
+    int right = bound - 1;
     int n = right - left + 1;
     int gap, i, j;
     std::vector<int> gaps;

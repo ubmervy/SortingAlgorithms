@@ -1,0 +1,14 @@
+Words number: 5000
+Unique words: 79%
+
+Stable sorting was required
+Applied sorting algorithm: Merge
+
+Duration: 
+Merge     	0.304106 sec
+
+Compares: 
+Merge     	89377
+
+Moves (exchanges): 
+Merge     	123616

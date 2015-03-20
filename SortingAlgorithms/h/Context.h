@@ -19,7 +19,7 @@ public:
     virtual void SetSortStrategy(std::unique_ptr<SortStrategy> &sorttype) = 0;
 
     //Should apply sorting algorithm
-    virtual SortResult ApplySortStrategy(Sequence &sequence) = 0;
+    virtual SortResult ApplySortStrategy(Sequence &sequence, int bound) = 0;
 
 protected:
     std::unique_ptr<SortStrategy> sortStrategy; //points to chosen SortStrategy object

@@ -17,13 +17,13 @@ public:
     const std::string alg_name = "Heap";// sorting algorithm name
 
     // Measures sorting time and returns SortResult
-    SortResult	SortSequence(Sequence &sequence) override;
+    SortResult	SortSequence(Sequence &sequence, int bound) override;
 
     SortResult sr { alg_name }; //Object for storing sort results
 
 private:
     //Sorts sequence of elements
-    void HeapSortSequence(Sequence &sequence);
+    void HeapSortSequence(Sequence &sequence, int bound);
 
     //Balances heap subtrees
     void fixDown(Sequence &sequence, int k, int N);

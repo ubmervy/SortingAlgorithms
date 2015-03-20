@@ -18,13 +18,13 @@ public:
     const std::string alg_name = "Quick";// sorting algorithm name
 
     // Measures sorting time and returns SortResult
-    SortResult	SortSequence(Sequence &sequence) override;
+    SortResult	SortSequence(Sequence &sequence, int bound) override;
 
     SortResult sr { alg_name }; //Object for storing sort results
 
 private:
     //Sorts sequence of elements
-    void QuickSortSequence(Sequence &sequence);
+    void QuickSortSequence(Sequence &sequence, int bound);
 
     //Gets pivot element for quicksort
     int MakePartition(Sequence &sequence, int left, int right);

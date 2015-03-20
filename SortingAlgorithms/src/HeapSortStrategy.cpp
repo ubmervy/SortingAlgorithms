@@ -18,11 +18,11 @@ HeapSortStrategy::~HeapSortStrategy()
 }
 
 // Measures sorting time and returns SortResult
-SortResult HeapSortStrategy::SortSequence(Sequence &sequence)
+SortResult HeapSortStrategy::SortSequence(Sequence &sequence, int bound)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
-    HeapSortSequence(sequence);
+    HeapSortSequence(sequence, bound);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration< double, std::ratio<1, 1>> dur = t2 - t1;
@@ -32,9 +32,9 @@ SortResult HeapSortStrategy::SortSequence(Sequence &sequence)
 }
 
 //Sorts sequence of elements
-void HeapSortStrategy::HeapSortSequence(Sequence &sequence)
+void HeapSortStrategy::HeapSortSequence(Sequence &sequence, int bound)
 {
-    int k, N = sequence.fd.size() - 1;
+    int k, N = bound - 1;
     int left = 0;
     //int right = sequence.fd.size() - 1;
 

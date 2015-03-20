@@ -18,11 +18,11 @@ InsertionSortStrategy::~InsertionSortStrategy()
 }
 
 // Measures sorting time and returns SortResult
-SortResult InsertionSortStrategy::SortSequence(Sequence &sequence)
+SortResult InsertionSortStrategy::SortSequence(Sequence &sequence, int bound)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
-    InsertionSortSequence(sequence);
+    InsertionSortSequence(sequence, bound);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
@@ -32,10 +32,10 @@ SortResult InsertionSortStrategy::SortSequence(Sequence &sequence)
 }
 
 //Sorts sequence of elements
-void InsertionSortStrategy::InsertionSortSequence(Sequence &sequence)
+void InsertionSortStrategy::InsertionSortSequence(Sequence &sequence, int bound)
 {
     int left = 0;
-    int right = sequence.fd.size() - 1;
+    int right = bound - 1;
     for (int i = left + 1; i <= right; i++)
     {
         int j = i;

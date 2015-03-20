@@ -18,11 +18,11 @@ QuickSortStrategy::~QuickSortStrategy()
 }
 
 // Measures sorting time and returns SortResult
-SortResult QuickSortStrategy::SortSequence(Sequence &sequence)
+SortResult QuickSortStrategy::SortSequence(Sequence &sequence, int bound)
 {
     std::chrono::time_point<std::chrono::high_resolution_clock> t1 = std::chrono::high_resolution_clock::now();
 
-    QuickSortSequence(sequence);
+    QuickSortSequence(sequence, bound);
 
     std::chrono::time_point<std::chrono::high_resolution_clock> t2 = std::chrono::high_resolution_clock::now();
     std::chrono::duration< double, std::ratio< 1, 1>> dur = t2 - t1;
@@ -32,10 +32,10 @@ SortResult QuickSortStrategy::SortSequence(Sequence &sequence)
 }
 
 //Sorts sequence of elements
-void QuickSortStrategy::QuickSortSequence(Sequence &sequence)
+void QuickSortStrategy::QuickSortSequence(Sequence &sequence, int bound)
 {
     int left = 0;
-    int right = sequence.fd.size() - 1;
+    int right = bound - 1;
     std::stack <int> st;
     st.push(right);
     st.push(left);

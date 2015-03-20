@@ -14,7 +14,7 @@ public:
     ~SortStrategy();
 
     //Should call ApplySortStrategy method of given strategy object
-    virtual SortResult SortSequence(Sequence &sequence) = 0;
+    virtual SortResult SortSequence(Sequence &sequence, int bound) = 0;
 
 };
 
