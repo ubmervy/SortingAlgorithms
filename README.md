@@ -141,7 +141,7 @@ Moves (exchanges)
 TOTAL SIZE: 1000 WORDS
 UNIQUE WORDS: 450 (45%)
 Duration
-           	size =    1000	size =    500	size =    100	
+           	size = 1000	  size = 500	  size = 100	
       Heap	0.000479613 	0.000215011 	3.2388e-05  	
  Insertion	0.00379864  	1.966e-05   	5.022e-06   	
      Merge	0.0143818   	0.00722617  	0.00137771  	
@@ -150,7 +150,7 @@ Duration
      Shell	0.000184221 	8.5859e-05  	1.9449e-05  	
 
 Compares
-           	size =    1000	size =    500	size =    100	
+           	size = 1000	  size = 500	  size = 100	
       Heap	1972        	4           	0           	
  Insertion	248862      	998         	198         	
      Merge	12162       	4974        	672         	
@@ -159,7 +159,7 @@ Compares
      Shell	12944       	5546        	724         	
 
 Moves (exchanges)
-           	size =    1000	size =    500	size =    100	
+           	size = 1000	  size = 500	  size = 100	
       Heap	8972        	4471        	661         	
  Insertion	124431      	499         	99          	
      Merge	19952       	8976        	1344        	
